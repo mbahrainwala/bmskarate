@@ -53,7 +53,7 @@ public class LoginController {
     }
 
     @RequestMapping(value = "/api/logout", method = RequestMethod.POST)
-    public ResponseEntity logout(Principal auth, @RequestHeader("X-SESSION-ID") String token) throws BmsException {
+    public ResponseEntity<String> logout(Principal auth, @RequestHeader("X-SESSION-ID") String token) throws BmsException {
         if(auth==null)
             throw new BmsException("unauthorized");
 
@@ -63,7 +63,7 @@ public class LoginController {
         sc.setAuthentication(null);
 
         SessionTokenManager.removeToken(token);
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok("logout success");
     }
 }
 

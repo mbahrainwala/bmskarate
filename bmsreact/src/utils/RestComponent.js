@@ -1,11 +1,11 @@
 import axios from 'axios';
 
 
-export const restCall = async(method, endpoint, setApiRet, data) =>{
+export const restCall = async(method, endpoint, setApiRet, token, data) =>{
     axios({
          method: method,
          url: endpoint,
-         headers: {'Content-Type': 'application/json; charset=utf-8' },
+         headers: {'Content-Type': 'application/json; charset=utf-8', 'X-SESSION-ID':token },
          data:data
         }
     ).then((response) => {
