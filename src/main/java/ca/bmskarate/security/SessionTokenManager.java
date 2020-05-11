@@ -13,7 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class SessionTokenManager {
     private static final Map<String, SessionCache> sessionCache = new ConcurrentHashMap<>();
 
-    private static long sessionTimeOut=72000;
+    private static long sessionTimeOut=2*24*60*60*1000;
 
     public static Authentication getToken(String token){
         Date dte = new Date();
