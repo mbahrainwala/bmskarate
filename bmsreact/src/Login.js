@@ -1,4 +1,4 @@
-import React, {useState}  from "react";
+import React, {useState, useEffect}  from "react";
 import {
   FormControl,
   FormLabel,
@@ -20,20 +20,18 @@ const Login = props => {
 
     const [apiRet, setApiRet] = useState({});
 
+    useEffect(() => {
+        if(apiRet.token !== undefined){
+            const newProps = {...props.globalData};
+            newProps.token = apiRet.token;
+            newProps.loginUser = apiRet.user;
+            newProps.page = 'mainApp';
+            props.setGlobalData(newProps);
+        }
+    });
+
     const loginUser = (method, uri) => {
         restCall('POST', `${props.globalData.serverURI}/login`, setApiRet, loginState);
-
-//        if(apiRet.error !== undefined){
-//        }
-//        else if(apiRet.token !== undefined){
-//            //put the token and user into the global vars.
-//            const newProps = {...props.globalData};
-//            newProps.token = apiRet.token;
-//            newProps.loggedUser = apiRet.user;
-//            newProps.page = 'mainApp';
-//            props.setGlobalData(newProps);
-//        }
-
     }
 
     return(

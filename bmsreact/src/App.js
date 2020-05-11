@@ -4,6 +4,7 @@ import Toolbar from '@material-ui/core/Toolbar'
 import TypoGraphy from '@material-ui/core/Typography'
 
 import Login from './Login'
+import UserManager from './UserManager'
 
 const serverURI='http://localhost:8080';
 
@@ -19,6 +20,7 @@ function App(){
                     <TypoGraphy variant="title"color="inherit">
                         BMS Karate
                     </TypoGraphy>
+                    <UserManager globalData={globalData} setGlobalData={setGlobalData}/>
                 </Toolbar>
             </AppBar>
             {globalData.page==='login'?<Login globalData={globalData} setGlobalData={setGlobalData}/>:null}
