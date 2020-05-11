@@ -1,6 +1,7 @@
 import React, {useState}  from "react";
 import {
   FormControl,
+  FormLabel,
   InputLabel,
   Input,
   Button
@@ -20,18 +21,18 @@ const Login = props => {
     const [apiRet, setApiRet] = useState({});
 
     const loginUser = (method, uri) => {
-        restCall('POST', `${props.globalData.serverURI}/login`, loginState, setApiRet);
+        restCall('POST', `${props.globalData.serverURI}/login`, setApiRet, loginState);
 
-        if(apiRet.error !== undefined){
-        }
-        else if(apiRet.token !== undefined){
-            //put the token and user into the global vars.
-            const newProps = {...props.globalData};
-            newProps.token = apiRet.token;
-            newProps.loggedUser = apiRet.user;
-            newProps.page = 'mainApp';
-            props.setGlobalData(newProps);
-        }
+//        if(apiRet.error !== undefined){
+//        }
+//        else if(apiRet.token !== undefined){
+//            //put the token and user into the global vars.
+//            const newProps = {...props.globalData};
+//            newProps.token = apiRet.token;
+//            newProps.loggedUser = apiRet.user;
+//            newProps.page = 'mainApp';
+//            props.setGlobalData(newProps);
+//        }
 
     }
 
@@ -47,6 +48,7 @@ const Login = props => {
 
         <form style={{ width: "50%" }} onChange={handleChange}>
             <h1>Login</h1>
+            {apiRet.error !== undefined?(<FormLabel component="legend">{apiRet.error}</FormLabel>):(<></>)}
 
             <FormControl margin="normal" fullWidth>
                 <InputLabel htmlFor="email">Email</InputLabel>

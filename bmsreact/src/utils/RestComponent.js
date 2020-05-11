@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 
-export const restCall = async(method, endpoint, data, setApiRet) =>{
+export const restCall = async(method, endpoint, setApiRet, data) =>{
     axios({
          method: method,
          url: endpoint,
