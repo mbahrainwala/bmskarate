@@ -7,6 +7,7 @@ import Button from '@material-ui/core/Button';
 
 import Login from './Login'
 import Register from './Register'
+import Forgot from './Forgot'
 import UserManager from './UserManager'
 import {restCall} from './utils/RestComponent'
 
@@ -50,6 +51,7 @@ function App(){
             </AppBar>
             {globalData.page==='login'?<Login globalData={globalData} setGlobalData={setGlobalData}/>:null}
             {globalData.page==='register'?<Register globalData={globalData} setGlobalData={setGlobalData}/>:null}
+            {globalData.page==='forgot'?<Forgot globalData={globalData} setGlobalData={setGlobalData}/>:null}
         </div>
     );
 }

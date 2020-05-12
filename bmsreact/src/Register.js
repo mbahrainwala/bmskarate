@@ -62,6 +62,9 @@ const Register = props => {
           <form style={{ width: "50%" }} onChange={handleChange.bind(this)} id="registrationForm">
             <h1>Register</h1>
             {apiRet.error !== undefined?(<FormLabel component="legend">{apiRet.error}</FormLabel>):(<></>)}
+            {apiRet==='registration successful'?(<FormLabel component="legend">
+                Registration is successful. Please check your email for further instructions.<p/>
+            </FormLabel>):(<>
 
             <FormControl margin="normal" fullWidth>
                 <InputLabel htmlFor="email">Email</InputLabel>
@@ -105,7 +108,7 @@ const Register = props => {
 
             <Button variant="contained" color="primary" size="medium" onClick={registerUser}>
                 Send
-            </Button>
+            </Button></>)}
 
             <Button color="primary" size="medium" onClick={()=>{
                 const newProps = {...props.globalData};
