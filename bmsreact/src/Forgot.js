@@ -39,7 +39,7 @@ const Forgot = props => {
             padding: 20
             }}
         >
-            <form style={{ width: "50%" }} onChange={handleChange.bind(this)} id="registrationForm">
+            <form style={{ width: "50%" }} onChange={handleChange.bind(this)}>
                 <h1>Forgot Password</h1>
                 {apiRet.error !== undefined?(<FormLabel component="legend">{apiRet.error}</FormLabel>):(<></>)}
                 {apiRet==='reset successful'?(

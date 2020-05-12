@@ -58,7 +58,7 @@ const Register = props => {
               padding: 20
             }}
           >
-          <form style={{ width: "50%" }} onChange={handleChange.bind(this)} id="registrationForm">
+          <form style={{ width: "50%" }} onChange={handleChange.bind(this)}>
             <h1>Register</h1>
             {apiRet.error !== undefined?(<FormLabel component="legend">{apiRet.error}</FormLabel>):(<></>)}
             {apiRet==='registration successful'?(<FormLabel component="legend">
