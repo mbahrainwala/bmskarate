@@ -55,8 +55,11 @@ public class UserController {
 
             UserVo origUser = optionalUser.get();
 
+            if(userReq.getType()==null || userReq.getType().isEmpty())
+                userReq.setType(origUser.getType());
+
             if(!UserService.AllowedUserTypes.S.toString().equals(principal.getType())
-                    && !userReq.getType().equals(origUser.getType())){
+                    && !origUser.getType().equals(userReq.getType())){
                 throw new BmsException("User is not allowed to change user type.");
             }
 

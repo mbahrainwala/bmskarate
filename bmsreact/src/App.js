@@ -72,6 +72,7 @@ function App(){
                             <Button onClick={()=>{
                                 const newProps = {...globalData};
                                 newProps.page='mainApp';
+                                newProps.appPage='default';
                                 setGlobalData(newProps);
                                 }}><HomeIcon style={{ color: 'white' }}/></Button>
                             ):(<></>)

@@ -26,6 +26,7 @@ const Login = props => {
             newProps.token = apiRet.token;
             newProps.loginUser = apiRet.user;
             newProps.page = 'mainApp';
+            newProps.appPage='default';
             props.setGlobalData(newProps);
         }
     });
