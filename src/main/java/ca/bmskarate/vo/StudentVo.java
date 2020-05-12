@@ -44,4 +44,7 @@ public class StudentVo {
     @OneToMany
     @LazyCollection(LazyCollectionOption.FALSE)
     List<StudentVideoVo> video;
+
+    @Column(name="photo", length = 512, nullable=false)
+    String photo;
 }

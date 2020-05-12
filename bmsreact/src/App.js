@@ -53,7 +53,7 @@ function App(){
                                 const newProps = {...globalData};
                                 newProps.page='mainApp';
                                 setGlobalData(newProps);
-                                }}><HomeIcon/></Button>
+                                }}><HomeIcon style={{ color: 'white' }}/></Button>
                             ):(<></>)
                         }BMS Karate
                     </TypoGraphy>

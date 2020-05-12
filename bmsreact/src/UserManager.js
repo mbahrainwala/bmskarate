@@ -10,23 +10,23 @@ import {restCall} from './utils/RestComponent'
 const UserManager = props => {
     const [anchorEl, setAnchorEl] = React.useState(null);
 
-      const handleClick = (event) => {
+    const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
-      };
+    };
 
-      const handleClose = () => {
+    const handleClose = () => {
         setAnchorEl(null);
-      };
+    };
 
-        const [apiRet, setApiRet] = useState({});
+    const [apiRet, setApiRet] = useState({});
 
-        const logout = () => {
-            restCall('POST', `${props.globalData.serverURI}/api/logout`, setApiRet, props.globalData.token);
-            localStorage.clear();
-            const newProps = {page:'login', serverURI:`${props.globalData.serverURI}`};
-            newProps.page='login';
-            props.setGlobalData(newProps);
-        };
+    const logout = () => {
+        restCall('POST', `${props.globalData.serverURI}/api/logout`, setApiRet, props.globalData.token);
+        localStorage.clear();
+        const newProps = {page:'login', serverURI:`${props.globalData.serverURI}`};
+        newProps.page='login';
+        props.setGlobalData(newProps);
+    };
 
     return(
         <>
@@ -42,6 +42,15 @@ const UserManager = props => {
                      anchorEl={anchorEl}
                      open={Boolean(anchorEl)}
                      onClose={handleClose}
+                     anchorReference={anchorEl}
+                     anchorOrigin = {{
+                        vertical: 'bottom',
+                                  horizontal: 'left'
+                     }}
+                     transformOrigin={{
+                               vertical: 'top',
+                               horizontal: 'left',
+                             }}
                    >
                      <MenuItem onClick={()=>{
                         const newProps = {...props.globalData};

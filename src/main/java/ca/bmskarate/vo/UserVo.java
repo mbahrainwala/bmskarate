@@ -78,6 +78,9 @@ public class UserVo {
     @LazyCollection(LazyCollectionOption.FALSE)
     List<StudentVo> students;
 
+    @Column(name="photo", length = 512, nullable=false)
+    String photo;
+
     public void setPasswordAsEncrypt(String password){
         this.setPassword(SecurityUtils.getMD5Hash(password));
     }

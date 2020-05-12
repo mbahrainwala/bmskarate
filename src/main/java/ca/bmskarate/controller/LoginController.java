@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -33,7 +34,8 @@ public class LoginController {
         UserVo userVo = userService.getUserByEmailPassword(loginReq.getEmailId(), loginReq.getPassword());
 
         if(userVo!=null) {
-
+            userVo.setLastLoggedIn(new Date());
+            userService.saveUser(userVo);
             List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
             authorities.add(new SimpleGrantedAuthority(userVo.getType()));
             Authentication authentication = new UsernamePasswordAuthenticationToken(userVo, null, authorities);
