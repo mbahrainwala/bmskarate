@@ -22,6 +22,7 @@ const UserManager = props => {
 
         const logout = () => {
             restCall('POST', `${props.globalData.serverURI}/api/logout`, setApiRet, props.globalData.token);
+            localStorage.clear();
             const newProps = {page:'login', serverURI:`${props.globalData.serverURI}`};
             newProps.page='login';
             props.setGlobalData(newProps);
