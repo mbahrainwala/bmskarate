@@ -39,11 +39,15 @@ const UserManager = props => {
              <Menu
                      id="simple-menu"
                      anchorEl={anchorEl}
-                     keepMounted
                      open={Boolean(anchorEl)}
                      onClose={handleClose}
                    >
-                     <MenuItem onClick={handleClose}>Profile</MenuItem>
+                     <MenuItem onClick={()=>{
+                        const newProps = {...props.globalData};
+                                            newProps.appPage='editUser';
+                                            props.setGlobalData(newProps);
+                                            handleClose();
+                        }}>Profile</MenuItem>
                      <MenuItem onClick={logout}>Logout</MenuItem>
                    </Menu>
             </div>

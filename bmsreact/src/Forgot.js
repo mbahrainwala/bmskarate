@@ -14,10 +14,10 @@ const forgotPassState = {
 
 const Forgot = props => {
     function handleChange(event) {
-        if(event.target.id=='email')
+        if(event.target.id==='email')
             forgotPassState.emailId = event.target.value;
 
-        if(event.target.id=='answer')
+        if(event.target.id==='answer')
             forgotPassState.secretAns = event.target.value;
 
         forgotPassState.cityId = props.globalData.commonData.cityList[0].id;
@@ -27,6 +27,9 @@ const Forgot = props => {
     const [apiRet, setApiRet] = useState({});
 
     const forgotPass=()=>{
+        forgotPassState.cityId = props.globalData.commonData.cityList[0].id;
+        forgotPassState.secretQues = props.globalData.commonData.secQues[0].secQuesCode;
+
         restCall('POST', `${props.globalData.serverURI}/forgot`, setApiRet, '', forgotPassState);
     }
 

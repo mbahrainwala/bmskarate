@@ -4,15 +4,8 @@ import {
   FormLabel,
   InputLabel,
   Input,
-  Button,
-  TextField,
+  Button
 } from "@material-ui/core";
-
-import { makeStyles } from '@material-ui/core/styles';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
 
 import {restCall} from './utils/RestComponent'
 
@@ -22,21 +15,21 @@ const registrationState = {
 
 const Register = props => {
     function handleChange(event) {
-        if(event.target.id=='email')
+        if(event.target.id==='email')
             registrationState.emailId = event.target.value;
-        if(event.target.id=='fname')
+        if(event.target.id==='fname')
             registrationState.firstName = event.target.value;
-        if(event.target.id=='lname')
+        if(event.target.id==='lname')
             registrationState.lastName = event.target.value;
-        if(event.target.id=='phone' && /^\d+$/.test(event.target.value))
+        if(event.target.id==='phone' && /^\d+$/.test(event.target.value))
             registrationState.phone = event.target.value;
-        if(event.target.id=='postal')
+        if(event.target.id==='postal')
              registrationState.postalCode = event.target.value;
-        if(event.target.id=='addr1')
+        if(event.target.id==='addr1')
              registrationState.addr1 = event.target.value;
-        if(event.target.id=='addr2')
+        if(event.target.id==='addr2')
             registrationState.addr2 = event.target.value;
-        if(event.target.id=='answer')
+        if(event.target.id==='answer')
             registrationState.secretAns = event.target.value;
 
         registrationState.cityId = props.globalData.commonData.cityList[0].id;
@@ -46,6 +39,9 @@ const Register = props => {
     const [apiRet, setApiRet] = useState({});
 
     const registerUser=()=>{
+        registrationState.cityId = props.globalData.commonData.cityList[0].id;
+        registrationState.secretQues = props.globalData.commonData.secQues[0].secQuesCode;
+
         restCall('POST', `${props.globalData.serverURI}/register`, setApiRet, '', registrationState);
     }
 
