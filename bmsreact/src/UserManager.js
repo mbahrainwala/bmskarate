@@ -32,7 +32,7 @@ const UserManager = props => {
         <>
         {props.globalData.loginUser!=null?(
             <div style={{halign:"right"}}>
-             <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+             <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick} style={{color:'white'}}>
                 <Avatar>H</Avatar>
                 &nbsp;&nbsp;{props.globalData.loginUser.firstName}
                 &nbsp;&nbsp;{props.globalData.loginUser.lastName}
