@@ -13,15 +13,26 @@ import {restCall} from './utils/RestComponent'
 
 const serverURI='http://localhost:8080';
 
+const useStateWithLocalStorage = localStorageKey => {
+  const [value, setValue] = React.useState(
+    JSON.parse(localStorage.getItem(localStorageKey)) || {page:'login', serverURI:`${serverURI}`}
+  );
+
+  React.useEffect(() => {
+    localStorage.setItem(localStorageKey, JSON.stringify(value));
+  }, [value, localStorageKey]);
+
+  return [value, setValue];
+};
+
 function App(){
-    const [globalData, setGlobalData] = useState({
-        page:'login', serverURI:`${serverURI}`
-        });
+    const [globalData, setGlobalData] = useStateWithLocalStorage('globalData')
 
     const [apiRet, setApiRet] = useState({});
 
     useEffect(() => {
         if(globalData.commonData === undefined || Object.getOwnPropertyNames(globalData.commonData).length === 0){
+
             //load the global data from the heartBeat service
             restCall('GET', `${globalData.serverURI}/heartBeat`, setApiRet, '');
             if(Object.getOwnPropertyNames(apiRet).length !== 0){
@@ -30,7 +41,7 @@ function App(){
                 setGlobalData(newProps);
             }
         }
-    });
+    }, [globalData, setGlobalData, apiRet, setApiRet]);
 
     return (
         <div>
