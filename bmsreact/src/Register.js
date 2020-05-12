@@ -1,6 +1,7 @@
 import React, { useState} from 'react';
 import {
   FormControl,
+  FormLabel,
   InputLabel,
   Input,
   Button,
@@ -13,32 +14,41 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 
+import {restCall} from './utils/RestComponent'
+
 const registrationState = {
-        secretQues:'A',
+
       };
 
 const Register = props => {
     function handleChange(event) {
-            if(event.target.id=='email')
-                registrationState.emailId = event.target.value;
-            if(event.target.id=='fname')
-                registrationState.firstName = event.target.value;
-            if(event.target.id=='lname')
-                registrationState.lastName = event.target.value;
-            if(event.target.id=='phone')
-                registrationState.phone = event.target.value;
-            if(event.target.id=='postal')
-                 registrationState.postalCode = event.target.value;
-            if(event.target.id=='addr1')
-                 registrationState.addr1 = event.target.value;
-            if(event.target.id=='addr2')
-                registrationState.addr2 = event.target.value;
-            if(event.target.id=='answer')
-                registrationState.secretAns = event.target.value;
+        if(event.target.id=='email')
+            registrationState.emailId = event.target.value;
+        if(event.target.id=='fname')
+            registrationState.firstName = event.target.value;
+        if(event.target.id=='lname')
+            registrationState.lastName = event.target.value;
+        if(event.target.id=='phone' && /^\d+$/.test(event.target.value))
+            registrationState.phone = event.target.value;
+        if(event.target.id=='postal')
+             registrationState.postalCode = event.target.value;
+        if(event.target.id=='addr1')
+             registrationState.addr1 = event.target.value;
+        if(event.target.id=='addr2')
+            registrationState.addr2 = event.target.value;
+        if(event.target.id=='answer')
+            registrationState.secretAns = event.target.value;
 
-            registrationState.cityId = props.globalData.commonData.cityList[0].id;
-            registrationState.secretQues = props.globalData.commonData.secQues[0].secQuesCode;
-        }
+        registrationState.cityId = props.globalData.commonData.cityList[0].id;
+        registrationState.secretQues = props.globalData.commonData.secQues[0].secQuesCode;
+    }
+
+    const [apiRet, setApiRet] = useState({});
+
+    const registerUser=()=>{
+        console.log(registrationState);
+        restCall('POST', `${props.globalData.serverURI}/register`, setApiRet, '', registrationState);
+    }
 
     return (
         <div
@@ -51,6 +61,7 @@ const Register = props => {
           >
           <form style={{ width: "50%" }} onChange={handleChange.bind(this)} id="registrationForm">
             <h1>Register</h1>
+            {apiRet.error !== undefined?(<FormLabel component="legend">{apiRet.error}</FormLabel>):(<></>)}
 
             <FormControl margin="normal" fullWidth>
                 <InputLabel htmlFor="email">Email</InputLabel>
@@ -91,6 +102,10 @@ const Register = props => {
                 <InputLabel htmlFor="answer">What is your mothers maiden name</InputLabel>
                 <Input id="answer" type="password" />
             </FormControl>
+
+            <Button variant="contained" color="primary" size="medium" onClick={registerUser}>
+                Send
+            </Button>
 
             <Button color="primary" size="medium" onClick={()=>{
                 const newProps = {...props.globalData};
