@@ -5,7 +5,8 @@ import EditUser from './EditUser'
 const MainApp = props => {
     return(
         <div>
-            {props.globalData.appPage==='editUser'?(<EditUser globalData={props.globalData} setGlobalData={props.setGlobalData}/>):null}
+            {props.globalData.appPage==='editUser'?(<EditUser userData={props.globalData.loginUser}
+                token={props.globalData.token} serverURI={props.globalData.serverURI}/>):null}
             {props.globalData.appPage==='default'?(<>
                 <ActionCard/> &nbsp; <ActionCard/> &nbsp; <ActionCard/>
             </>):null}
