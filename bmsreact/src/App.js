@@ -47,7 +47,7 @@ function App(){
         <div>
             <AppBar color="primary" position="static">
                 <Toolbar>
-                    <TypoGraphy variant="title"color="inherit">
+                    <TypoGraphy variant="h6" color="inherit">
                         {globalData.loginUser!=null?(
                             <Button onClick={()=>{
                                 const newProps = {...globalData};
