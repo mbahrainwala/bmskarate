@@ -30,9 +30,15 @@ public class UserController {
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public ResponseEntity<String> register(@RequestBody UserRequest userReq, HttpServletRequest httpServletRequest) throws BmsException {
-            userService.saveUser(getUser(userReq));
+        userService.saveUser(getUser(userReq));
 
-            return ResponseEntity.ok("registration successful");
+        return ResponseEntity.ok("registration successful");
+    }
+
+    @RequestMapping(value = "/forgot", method = RequestMethod.POST)
+    public ResponseEntity<String> forgot(@RequestBody UserRequest userReq, HttpServletRequest httpServletRequest) throws BmsException {
+        userService.forgotPassword(getUser(userReq));
+        return ResponseEntity.ok("reset successful");
     }
 
     @RequestMapping(value = "/api/updateUser", method = RequestMethod.POST)

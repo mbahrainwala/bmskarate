@@ -100,6 +100,19 @@ public class UserService {
         this.userRepository.save(vo);
     }
 
+    @Transactional
+    public void forgotPassword(UserVo vo) throws BmsException{
+        UserVo userVo = getUserByEmail(vo.getEmailId());
+
+        if(userVo==null || !userVo.getSecretAns().equals(vo.getSecretAns())){
+            throw new BmsException("User not found/wrong secret answer");
+        }
+
+        userVo.setPasswordAsEncrypt("abc123");
+
+        saveUser(userVo);
+    }
+
     private String validateUser(UserVo vo){
         boolean hasError = false;
         String error="";

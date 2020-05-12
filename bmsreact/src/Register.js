@@ -46,7 +46,6 @@ const Register = props => {
     const [apiRet, setApiRet] = useState({});
 
     const registerUser=()=>{
-        console.log(registrationState);
         restCall('POST', `${props.globalData.serverURI}/register`, setApiRet, '', registrationState);
     }
 
