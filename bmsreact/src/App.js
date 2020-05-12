@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import {Helmet} from 'react-helmet';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar'
 import TypoGraphy from '@material-ui/core/Typography'
@@ -45,6 +46,9 @@ function App(){
 
     return (
         <div>
+            <Helmet>
+                <title>BMS Karate</title>
+            </Helmet>
             <AppBar color="primary" position="static">
                 <Toolbar>
                     <TypoGraphy variant="h6" color="inherit">

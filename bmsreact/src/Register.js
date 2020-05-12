@@ -77,7 +77,7 @@ const Register = props => {
             </FormControl>
 
             <FormControl margin="normal" fullWidth>
-                <InputLabel htmlFor="phone">Phone xxxxxxxxxx</InputLabel>
+                <InputLabel htmlFor="phone">Phone (Only numbers will be accepted.)</InputLabel>
                 <Input id="phone" type="text" />
             </FormControl>
 
