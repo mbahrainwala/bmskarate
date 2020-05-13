@@ -8,9 +8,11 @@ import {
 } from "@material-ui/core";
 import {restCall} from './utils/RestComponent'
 
-const loginState = {};
+var loginState = {};
 
 const Login = props => {
+
+
     function handleChange(event) {
         if(event.target.id==='email')
             loginState.emailId=event.target.value;
@@ -22,6 +24,7 @@ const Login = props => {
 
     useEffect(() => {
         if(apiRet.token !== undefined){
+            loginState = {};
             const newProps = {...props.globalData};
             newProps.token = apiRet.token;
             newProps.loginUser = apiRet.user;

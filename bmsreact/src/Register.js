@@ -32,6 +32,7 @@ const Register = props => {
         if(event.target.id==='answer')
             registrationState.secretAns = event.target.value;
 
+        registrationState.type='U';
         registrationState.cityId = props.globalData.commonData.cityList[0].id;
         registrationState.secretQues = props.globalData.commonData.secQues[0].secQuesCode;
     }

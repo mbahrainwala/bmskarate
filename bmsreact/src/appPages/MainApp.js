@@ -6,7 +6,8 @@ const MainApp = props => {
     return(
         <div>
             {props.globalData.appPage==='editUser'?(<EditUser userData={props.globalData.loginUser}
-                token={props.globalData.token} serverURI={props.globalData.serverURI}/>):null}
+                token={props.globalData.token} serverURI={props.globalData.serverURI}
+                fromProfile='true'/>):null}
             {props.globalData.appPage==='default'?(<>
                 <ActionCard/> &nbsp; <ActionCard/> &nbsp; <ActionCard/>
             </>):null}

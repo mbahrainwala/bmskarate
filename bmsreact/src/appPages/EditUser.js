@@ -1,11 +1,10 @@
-import React, { useState} from 'react';
+import React, { useState, useEffect} from 'react';
 import {
   FormControl,
   FormLabel,
   InputLabel,
   Input,
   Button,
-  TextField,
   MenuItem,
   Select,
   RadioGroup,
@@ -13,19 +12,20 @@ import {
   Radio
 } from "@material-ui/core";
 
-import { makeStyles } from '@material-ui/core/styles';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-
 import {restCall} from '../utils/RestComponent'
 
-const editState = {
+var editState = {
 
       };
 
 const EditUser = props => {
+
+    useEffect(() => {
+        if(Object.getOwnPropertyNames(editState).length === 0){
+            editState={...props.userData};
+        }
+    },[editState, props.userData]);
+
     function handleChange(event) {
         if(event.target.id==='fname')
             editState.firstName = event.target.value;
@@ -41,6 +41,9 @@ const EditUser = props => {
             editState.addr2 = event.target.value;
         if(event.target.id==='answer')
             editState.secretAns = event.target.value;
+
+        if(event.target.id==='oldpass')
+            editState.oldPassword = event.target.value;
 
         editState.cityId = props.userData.cityVo.id;
         editState.secretQues = props.userData.secretQues;
@@ -108,33 +111,38 @@ const EditUser = props => {
                     <Input id="postal" type="text" defaultValue={props.userData.postalCode}/>
                 </FormControl>
 
-                {props.userData.type==='S'?(<>
-                    <FormControl margin="normal" fullWidth>
-                        <InputLabel htmlFor="type-lable">User type</InputLabel>
-                        <Select
-                          labelId="type"
-                          id="type"
-                          defaultValue={props.userData.type}
-                          onChange={handleTypeChange}
-                        >
-                          <MenuItem value='U'>User</MenuItem>
-                          <MenuItem value='A'>Admin</MenuItem>
-                          <MenuItem value='S'>Super User</MenuItem>
-                        </Select>
-                    </FormControl>
-                    <p/>
-                    <FormControl>
-                      <FormLabel component="legend">Is Sensei</FormLabel>
-                      <RadioGroup aria-label="gender" name="gender1" defaultValue={props.userData.sesnei} onChange={handleChange}>
-                        <FormControlLabel value="Y" control={<Radio />} label="Yes" />
-                        <FormControlLabel value="N" control={<Radio />} label="No" />
-                      </RadioGroup>
-                    </FormControl></>
-                ):(<></>)}
+
+                <FormControl margin="normal" fullWidth>
+                    <InputLabel htmlFor="type-lable">User type</InputLabel>
+                    <Select
+                      labelId="type"
+                      id="type"
+                      defaultValue={props.userData.type}
+                      onChange={handleTypeChange}
+                    >
+                      <MenuItem value='U'>User</MenuItem>
+                      <MenuItem value='A'>Admin</MenuItem>
+                      <MenuItem value='S'>Super User</MenuItem>
+                    </Select>
+                </FormControl>
+                <p/>
+                <FormControl>
+                  <FormLabel component="legend">Is Sensei</FormLabel>
+                  <RadioGroup aria-label="gender" name="gender1" defaultValue={props.userData.sesnei} onChange={handleChange}>
+                    <FormControlLabel value="Y" control={<Radio />} label="Yes" />
+                    <FormControlLabel value="N" control={<Radio />} label="No" />
+                  </RadioGroup>
+                </FormControl>
+
 
                 <FormControl margin="normal" fullWidth>
                     <InputLabel htmlFor="answer">What is your mothers maiden name</InputLabel>
                     <Input id="answer" type="password" />
+                </FormControl>
+
+                <FormControl margin="normal" fullWidth>
+                    <InputLabel htmlFor="oldpass">Existing Password</InputLabel>
+                    <Input id="oldpass" type="password" />
                 </FormControl>
 
                 <Button variant="contained" color="primary" size="medium" onClick={editUser}>
