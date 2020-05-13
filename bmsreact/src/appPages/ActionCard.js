@@ -34,24 +34,31 @@ const classes = useStyles();
     if(props.type === 'user'){}
   }
 
-  return (
+    return (
     <Card className={classes.root}>
-      <CardContent>
-        <Typography variant="h5" component="h2">
-          {props.desc}
-        </Typography>
-      </CardContent>
-      <CardActions>
-        <Button size="small" onClick={launch}>Launch</Button>
-        {props.type==='v'?(<div style={{width:200}}><Player
-           playsInline
-           preload='metadata'
-           fluid='false'
-           src={videoURI}
-         /></div>):(null)}
-      </CardActions>
+        <CardContent>
+            <Typography variant="h5" component="h2">
+            {props.desc}
+            </Typography>
+        </CardContent>
+        <CardContent>
+            {props.type==='v'?(<div style={{width:250}}>
+                <Player
+                playsInline
+                preload='none'
+                fluid='false'
+                src={videoURI}
+                />
+                </div>):(null)
+            }
+        </CardContent>
+        <CardActions>
+            {props.type==='v'?(
+                <input type="file" name="file" id="file"/>
+            ):(null)}
+        </CardActions>
     </Card>
-  );
-}
+    );
+    }
 
 export default ActionCard;

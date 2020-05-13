@@ -21,8 +21,6 @@ const Register = props => {
             registrationState.firstName = event.target.value;
         if(event.target.id==='lname')
             registrationState.lastName = event.target.value;
-        if(event.target.id==='phone' && /^\d+$/.test(event.target.value))
-            registrationState.phone = event.target.value;
         if(event.target.id==='postal')
              registrationState.postalCode = event.target.value;
         if(event.target.id==='addr1')

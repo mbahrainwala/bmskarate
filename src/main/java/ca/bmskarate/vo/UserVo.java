@@ -30,8 +30,8 @@ public class UserVo {
     @Column(name="emailid", length=512, unique=true, nullable=false)
     String emailId;
 
-    @Column(name="phone")
-    long phone;
+    @Column(name="phone", length=20)
+    String phone;
 
     @Column(name="password", length=512, nullable=false)
     String password;
@@ -80,6 +80,9 @@ public class UserVo {
 
     @Column(name="photo", length = 512)
     String photo;
+
+    @Column(name="disabled", length = 1)
+    String disabled;
 
     public void setPasswordAsEncrypt(String password){
         this.setPassword(SecurityUtils.getMD5Hash(password));

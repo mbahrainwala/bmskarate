@@ -120,7 +120,7 @@ public class UserService {
     private String validateUser(UserVo vo){
         boolean hasError = false;
         String error="";
-        if(vo.getEmailId() == null || vo.getEmailId().isEmpty() || !vo.getEmailId().contains("@") || !vo.getEmailId().contains(".")) {
+        if(vo.getEmailId() == null || vo.getEmailId().isEmpty() || !vo.getEmailId().matches("^\\w+@[a-zA-Z_]+?\\.[a-zA-Z]{2,3}$")) {
             error += "Invalid EmailId";
             hasError=true;
         }
@@ -137,6 +137,16 @@ public class UserService {
                 error += ", ";
             hasError=true;
             error += "Invalid Last Name";
+        }
+
+        if(vo.getPhone() != null)
+        {
+            if(!vo.getPhone().matches("^[2-9]\\d{2}-\\d{3}-\\d{4}$")){
+                if(hasError)
+                    error += ", ";
+                hasError=true;
+                error += "Phone number must be of type xxx-xxx-xxxx";
+            }
         }
 
         if(vo.getPostalCode() == null || vo.getPostalCode().isEmpty()){

@@ -47,4 +47,8 @@ public class StudentVo {
 
     @Column(name="photo", length = 512, nullable=false)
     String photo;
+
+    @OneToMany
+    @LazyCollection(LazyCollectionOption.FALSE)
+    List<CertificatesVo> certificates;
 }
