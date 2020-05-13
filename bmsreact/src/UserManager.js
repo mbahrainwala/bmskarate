@@ -3,7 +3,7 @@ import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import { makeStyles } from '@material-ui/core/styles';
-import Avatar from '@material-ui/core/Avatar';
+import PersonIcon from '@material-ui/icons/Person';
 
 import {restCall} from './utils/RestComponent'
 
@@ -33,7 +33,7 @@ const UserManager = props => {
         {props.globalData.loginUser!=null?(
             <div style={{halign:"right"}}>
              <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick} style={{color:'white'}}>
-                <Avatar>H</Avatar>
+                <PersonIcon/>
                 &nbsp;&nbsp;{props.globalData.loginUser.firstName}
                 &nbsp;&nbsp;{props.globalData.loginUser.lastName}
              </Button>

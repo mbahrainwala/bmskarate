@@ -3,6 +3,7 @@ package ca.bmskarate.service;
 import ca.bmskarate.exception.BmsException;
 import ca.bmskarate.repositories.UserRepository;
 import ca.bmskarate.util.SecurityUtils;
+import ca.bmskarate.util.YesNo;
 import ca.bmskarate.vo.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -87,6 +88,9 @@ public class UserService {
 
             vo.setPasswordAsEncrypt("abc123");//TODO: password needs to be done via email
 
+            vo.setPremium(YesNo.N.toString());
+            vo.setType(AllowedUserTypes.U.toString());
+            vo.setSesnei(YesNo.N.toString());
             vo.setCreatedDate(new Date());
         }else{
             //user already exists

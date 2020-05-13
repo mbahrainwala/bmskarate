@@ -68,6 +68,9 @@ public class UserController {
                 throw new BmsException("User is not allowed to change sensei status.");
             }
 
+            if(userReq.getPremium()==null)
+                userReq.setPremium(origUser.getPremium());
+
             if(!UserService.AllowedUserTypes.A.toString().equals(principal.getType())
                     && !userReq.getPremium().equals(origUser.getPremium())){
                 throw new BmsException("User is not allowed to change membership.");
@@ -75,10 +78,18 @@ public class UserController {
 
             //handle sensitive data encryption
             UserVo newUser = getUser(userReq);
-            if(userReq.getPassword()==null || userReq.getPassword().isEmpty())
+            if(userReq.getPassword()==null || userReq.getPassword().trim().isEmpty())
                 newUser.setPassword(origUser.getPassword());
+            else{
+                if(!userReq.getPassword().equals(userReq.getConfirmPassword()))
+                    throw new BmsException("New password and confirm passwords do not match");
+            }
+
             if(userReq.getSecretAns()==null || userReq.getSecretAns().isEmpty())
-                newUser.setPassword(origUser.getPassword());
+                newUser.setSecretAns(origUser.getSecretAns());
+
+            newUser.setCreatedDate(origUser.getCreatedDate());
+            newUser.setLastLoggedIn(origUser.getLastLoggedIn());
 
             if(!UserService.AllowedUserTypes.U.toString().equals(principal.getType())
                     || origUser.getPassword().equals(SecurityUtils.getMD5Hash(userReq.getOldPassword())))
@@ -97,6 +108,7 @@ public class UserController {
 
         if(cityVo!=null && cityVo.isPresent()) {
             UserVo userVo = new UserVo();
+            userVo.setId(req.getId());
             userVo.setEmailId(req.getEmailId()!=null?req.getEmailId().trim():null);
             userVo.setPasswordAsEncrypt(req.getPassword()!=null?req.getPassword().trim():null);
             userVo.setFirstName(req.getFirstName()!=null?req.getFirstName().trim():null);
@@ -105,9 +117,10 @@ public class UserController {
             userVo.setAddr2(req.getAddr2()!=null?req.getAddr2().trim():null);
             userVo.setPostalCode(req.getPostalCode()!=null?req.getPostalCode().trim():null);
             userVo.setCityVo(cityVo.get());
-            userVo.setType(UserService.AllowedUserTypes.U.toString());
+            userVo.setType(req.getType());
             userVo.setPhone(req.getPhone());
-            userVo.setSesnei(YesNo.N.toString());
+            userVo.setSesnei(req.getSesnei());
+            userVo.setPremium(req.getPremium());
 
             userVo.setSecAnsAsEncrypt(req.getSecretAns()!=null?req.getSecretAns().trim():null);
             userVo.setSecretQues(req.getSecretQues()!=null?req.getSecretQues().trim():null);

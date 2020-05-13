@@ -35,7 +35,6 @@ public class HeartBeatController {
 
     private static final String DEFAULT_PROVINCE_SETUP="Ontario";
     private static final String DEFAULT_CITY_SETUP="Vaughan";
-    private static final String DEFAULT_SUPER_USER="louis@bmskarate.com";
 
     @RequestMapping(value = "/heartBeat", method = RequestMethod.GET)
     public ResponseEntity<HeartBeatResponse> heartBeat() throws BmsException {
@@ -44,42 +43,13 @@ public class HeartBeatController {
         if(provinceVo==null) {
             provinceService.addProvince(DEFAULT_PROVINCE_SETUP);
             provinceVo = provinceService.findProvinceByName(DEFAULT_PROVINCE_SETUP);
-            //TODO: Optimize the city and user creation here.
-        }
 
-        CityVo cityVo = cityService.findCityByNameAndProvince(DEFAULT_CITY_SETUP, provinceVo);
-        if(cityVo==null)
-            cityService.addCity(DEFAULT_CITY_SETUP, provinceVo);
-
-        UserVo sUser = userService.getUserByEmail(DEFAULT_SUPER_USER);
-
-        List<UserVo> u1=userService.getUserByLastNameLike("K%");
-        List<UserVo> u2=userService.getUserByLastNameLike("A%");
-
-        if(sUser==null)
-        {
-            sUser = new UserVo();
-            sUser.setEmailId(DEFAULT_SUPER_USER);
-            sUser.setFirstName("Louis");
-            sUser.setLastName("Karate");
-            sUser.setSesnei(YesNo.Y.toString());
-            sUser.setAddr1("71 Innovation Drive");
-            sUser.setPostalCode("L4H0S3");
-            sUser.setPhone(9058513555L);
-            sUser.setType(UserService.AllowedUserTypes.S.toString());
-            sUser.setSecretQues(UserService.SecretQuestions.A.toString());
-            sUser.setSecAnsAsEncrypt("BMS");
-
+            CityVo cityVo = cityService.findCityByNameAndProvince(DEFAULT_CITY_SETUP, provinceVo);
             if(cityVo==null)
-                cityVo = cityService.findCityByNameAndProvince(DEFAULT_CITY_SETUP, provinceVo);
-
-            sUser.setCityVo(cityVo);
-            userService.saveUser(sUser);
-
-            sUser = userService.getUserByEmail(DEFAULT_SUPER_USER);
-            sUser.setPasswordAsEncrypt("SuperBMS!");
-            userService.saveUser(sUser);
+                cityService.addCity(DEFAULT_CITY_SETUP, provinceVo);
         }
+
+
 
         HeartBeatResponse resp = new HeartBeatResponse();
         resp.setProvinceList(provinceService.findAll());

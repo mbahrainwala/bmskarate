@@ -45,6 +45,12 @@ const EditUser = props => {
         if(event.target.id==='oldpass')
             editState.oldPassword = event.target.value;
 
+        if(event.target.id==='password')
+            editState.password = event.target.value;
+
+        if(event.target.id==='confirmPassword')
+            editState.confirmPassword = event.target.value;
+
         editState.cityId = props.userData.cityVo.id;
         editState.secretQues = props.userData.secretQues;
     };
@@ -75,6 +81,9 @@ const EditUser = props => {
             <form style={{ width: "50%" }} onChange={handleChange.bind(this)}>
                 <h1>Edit User</h1>
                 {apiRet.error !== undefined?(<FormLabel component="legend">{apiRet.error}</FormLabel>):(<></>)}
+                {apiRet==='Update Successful' && props.fromProfile==='true'?(<FormLabel component="legend">
+                    Please logout and log back in to see your changes.
+                    </FormLabel>):(<>
 
                 <FormControl margin="normal" fullWidth>
                     <InputLabel htmlFor="emailId">Email Id</InputLabel>
@@ -119,6 +128,7 @@ const EditUser = props => {
                       id="type"
                       defaultValue={props.userData.type}
                       onChange={handleTypeChange}
+                      disabled={props.fromProfile}
                     >
                       <MenuItem value='U'>User</MenuItem>
                       <MenuItem value='A'>Admin</MenuItem>
@@ -128,16 +138,25 @@ const EditUser = props => {
                 <p/>
                 <FormControl>
                   <FormLabel component="legend">Is Sensei</FormLabel>
-                  <RadioGroup aria-label="gender" name="gender1" defaultValue={props.userData.sesnei} onChange={handleChange}>
-                    <FormControlLabel value="Y" control={<Radio />} label="Yes" />
-                    <FormControlLabel value="N" control={<Radio />} label="No" />
+                  <RadioGroup aria-label="sensei" name="sensei" defaultValue={props.userData.sesnei} onChange={handleChange}>
+                    <FormControlLabel value="Y" disabled={props.fromProfile} control={<Radio />} label="Yes" />
+                    <FormControlLabel value="N" disabled={props.fromProfile} control={<Radio />} label="No" />
                   </RadioGroup>
                 </FormControl>
-
 
                 <FormControl margin="normal" fullWidth>
                     <InputLabel htmlFor="answer">What is your mothers maiden name</InputLabel>
                     <Input id="answer" type="password" />
+                </FormControl>
+
+                <FormControl margin="normal" fullWidth>
+                    <InputLabel htmlFor="password">New Password</InputLabel>
+                    <Input id="password" type="password" />
+                </FormControl>
+
+                <FormControl margin="normal" fullWidth>
+                    <InputLabel htmlFor="confirmPassword">Confirm Password</InputLabel>
+                    <Input id="confirmPassword" type="password" />
                 </FormControl>
 
                 <FormControl margin="normal" fullWidth>
@@ -147,7 +166,7 @@ const EditUser = props => {
 
                 <Button variant="contained" color="primary" size="medium" onClick={editUser}>
                     Send
-                </Button>
+                </Button></>)}
             </form>
         </div>
     );

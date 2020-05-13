@@ -26,4 +26,5 @@ public class UserRequest {
     String type;
 
     String oldPassword;
+    String confirmPassword;
 }

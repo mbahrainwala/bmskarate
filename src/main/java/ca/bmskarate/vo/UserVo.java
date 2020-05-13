@@ -78,7 +78,7 @@ public class UserVo {
     @LazyCollection(LazyCollectionOption.FALSE)
     List<StudentVo> students;
 
-    @Column(name="photo", length = 512, nullable=false)
+    @Column(name="photo", length = 512)
     String photo;
 
     public void setPasswordAsEncrypt(String password){
