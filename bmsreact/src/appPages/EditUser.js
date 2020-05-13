@@ -19,18 +19,24 @@ var editState = {
       };
 
 const EditUser = props => {
+    const [apiRet, setApiRet] = useState({});
 
     useEffect(() => {
         if(Object.getOwnPropertyNames(editState).length === 0){
             editState={...props.userData};
         }
-    },[editState, props.userData]);
+        if(apiRet==='Update Successful'){
+            editState={...props.userData};
+        }
+    },[editState, apiRet, props.userData]);
 
     function handleChange(event) {
         if(event.target.id==='fname')
             editState.firstName = event.target.value;
         if(event.target.id==='lname')
             editState.lastName = event.target.value;
+        if(event.target.id==='phone')
+            editState.phone = event.target.value;
         if(event.target.id==='postal')
              editState.postalCode = event.target.value;
         if(event.target.id==='addr1')
@@ -56,8 +62,6 @@ const EditUser = props => {
     function handleTypeChange(event) {
         editState.type = event.target.value;
     }
-
-    const [apiRet, setApiRet] = useState({});
 
     const editUser = () =>{
         editState.cityId = props.userData.cityVo.id;
@@ -99,7 +103,7 @@ const EditUser = props => {
                 </FormControl>
 
                 <FormControl margin="normal" fullWidth>
-                    <InputLabel htmlFor="phone">Phone (Only numbers will be accepted.)</InputLabel>
+                    <InputLabel htmlFor="phone">Phone (XXX-XXX-XXXX)</InputLabel>
                     <Input id="phone" type="text" defaultValue={props.userData.phone}/>
                 </FormControl>
 

@@ -21,6 +21,10 @@ const Register = props => {
             registrationState.firstName = event.target.value;
         if(event.target.id==='lname')
             registrationState.lastName = event.target.value;
+
+        if(event.target.id==='phone')
+                    registrationState.phone = event.target.value;
+
         if(event.target.id==='postal')
              registrationState.postalCode = event.target.value;
         if(event.target.id==='addr1')
@@ -76,7 +80,7 @@ const Register = props => {
             </FormControl>
 
             <FormControl margin="normal" fullWidth>
-                <InputLabel htmlFor="phone">Phone (Only numbers will be accepted.)</InputLabel>
+                <InputLabel htmlFor="phone">Phone (XXX-XXX-XXXX)</InputLabel>
                 <Input id="phone" type="text" />
             </FormControl>
 
