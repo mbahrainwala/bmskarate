@@ -4,6 +4,7 @@ import ca.bmskarate.controller.request.UserRequest;
 import ca.bmskarate.exception.BmsException;
 import ca.bmskarate.service.CityService;
 import ca.bmskarate.service.UserService;
+import ca.bmskarate.util.APIErrors;
 import ca.bmskarate.util.SecurityUtils;
 import ca.bmskarate.util.YesNo;
 import ca.bmskarate.vo.CityVo;
@@ -44,7 +45,7 @@ public class UserController {
     @RequestMapping(value = "/api/updateUser", method = RequestMethod.POST)
     public ResponseEntity<String> updateUser(Principal auth, @RequestBody UserRequest userReq, HttpServletRequest httpServletRequest) throws BmsException {
         if(auth==null)
-            throw new BmsException("unauthorized");
+            throw new BmsException(APIErrors.UNAUTHORISED);
 
         UserVo principal = (UserVo) ((UsernamePasswordAuthenticationToken)auth).getPrincipal();
 

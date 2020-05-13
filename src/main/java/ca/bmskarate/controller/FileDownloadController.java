@@ -2,11 +2,11 @@ package ca.bmskarate.controller;
 
 import ca.bmskarate.exception.BmsException;
 import ca.bmskarate.security.SessionTokenManager;
+import ca.bmskarate.util.APIErrors;
 import ca.bmskarate.vo.UserVo;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +24,7 @@ public class FileDownloadController {
     public ResponseEntity<StreamingResponseBody> download(@RequestParam String token, final HttpServletResponse response) throws BmsException {
         Authentication auth = SessionTokenManager.getToken(token);
         if(auth==null || auth.getPrincipal()==null)
-            throw new BmsException("unauthorised");
+            throw new BmsException(APIErrors.UNAUTHORISED);
 
         UserVo user =  (UserVo)auth.getPrincipal();
 

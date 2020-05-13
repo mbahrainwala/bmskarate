@@ -5,6 +5,7 @@ import ca.bmskarate.controller.response.LoginResponse;
 import ca.bmskarate.exception.BmsException;
 import ca.bmskarate.security.SessionTokenManager;
 import ca.bmskarate.service.UserService;
+import ca.bmskarate.util.APIErrors;
 import ca.bmskarate.vo.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -57,7 +58,7 @@ public class LoginController {
     @RequestMapping(value = "/api/logout", method = RequestMethod.POST)
     public ResponseEntity<String> logout(Principal auth, @RequestHeader("X-SESSION-ID") String token) throws BmsException {
         if(auth==null)
-            throw new BmsException("unauthorized");
+            throw new BmsException(APIErrors.UNAUTHORISED);
 
         UserVo principal = (UserVo) ((UsernamePasswordAuthenticationToken)auth).getPrincipal();
 
