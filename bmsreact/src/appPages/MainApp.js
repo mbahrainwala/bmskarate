@@ -9,7 +9,11 @@ const MainApp = props => {
                 token={props.globalData.token} serverURI={props.globalData.serverURI}
                 fromProfile='true'/>):null}
             {props.globalData.appPage==='default'?(<>
-                <ActionCard/> &nbsp; <ActionCard/> &nbsp; <ActionCard/>
+                {props.globalData.loginUser.type !== 'U' ? (
+                    <><ActionCard type='u' globalData={props.globalData} setGlobalData={props.setGlobalData} desc='Manage all registered users'/> &nbsp;</>
+                ):null}
+                <ActionCard type='s' desc='Students' globalData={props.globalData}/>
+                &nbsp; <ActionCard type='v' desc='Videos' globalData={props.globalData}/>
             </>):null}
         </div>
     );
