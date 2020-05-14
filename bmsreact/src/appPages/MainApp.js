@@ -10,7 +10,7 @@ const MainApp = props => {
                 fromProfile='true'/>):null}
             {props.globalData.appPage==='default'?(<>
                 {props.globalData.loginUser.type !== 'U' ? (
-                    <><ActionCard type='u' globalData={props.globalData} setGlobalData={props.setGlobalData} desc='Manage all registered users'/> &nbsp;</>
+                    <><ActionCard type='u' globalData={props.globalData} desc='Manage all registered users'/> &nbsp;</>
                 ):null}
                 <ActionCard type='s' desc='Students' globalData={props.globalData}/>
                 &nbsp; <ActionCard type='v' desc='Videos' globalData={props.globalData}/>

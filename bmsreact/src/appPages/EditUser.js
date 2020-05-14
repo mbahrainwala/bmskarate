@@ -28,7 +28,7 @@ const EditUser = props => {
         if(apiRet==='Update Successful'){
             editState={...props.userData};
         }
-    },[editState, apiRet, props.userData]);
+    },[apiRet, props.userData]);
 
     function handleChange(event) {
         if(event.target.id==='fname')

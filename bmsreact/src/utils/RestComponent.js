@@ -9,7 +9,8 @@ export const restCall = async(method, endpoint, setApiRet, token, data) =>{
          data:data
         }
     ).then((response) => {
-        setApiRet(response.data);
+        if(setApiRet)
+            setApiRet(response.data);
     }, (error) => {
         if(error.response.data.message !== null && error.response.data.message !== 'No message available' && error.response.data.message !== ''){
             var errorStr = {error:`${error.response.data.message}`}

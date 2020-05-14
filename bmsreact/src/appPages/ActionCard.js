@@ -1,83 +1,61 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
-import { Player} from 'video-react';
-import "./video-react.css";
-import axios from 'axios';
+import Button from '@material-ui/core/Button';
 
+const useStyles = makeStyles((theme) => ({
+    root: {
+        minWidth: 275,
+    },
+    bullet: {
+        display: 'inline-block',
+        margin: '0 2px',
+        transform: 'scale(0.8)',
+    },
+    title: {
+        fontSize: 14,
+    },
+    pos: {
+        marginBottom: 12,
+    },
 
-import {
-  FormGroup,
-} from "@material-ui/core";
-
-const useStyles = makeStyles({
-  root: {
-    minWidth: 275,
-  },
-  bullet: {
-    display: 'inline-block',
-    margin: '0 2px',
-    transform: 'scale(0.8)',
-  },
-  title: {
-    fontSize: 14,
-  },
-  pos: {
-    marginBottom: 12,
-  },
-});
+    paper: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        '& > *': {
+        margin: theme.spacing(0),
+        width: theme.spacing(18),
+        height: theme.spacing(6),
+        },
+    },
+}));
 
 const ActionCard = props => {
-const classes = useStyles();
+    const classes = useStyles();
 
-    const onChangeHandler=event=>{
-                var data = new FormData()
-               data.append('file', event.target.files[0])
-               data.append('type', 'V')
-               data.append('belt', '0')
-              console.log(data);
-            axios.post(`${props.globalData.serverURI}/api/uploadTrainingVideo`, data,
-                         {headers: {
-                               'Content-Type': 'multipart/form-data'
-                         }}
-                     )
-                     .then(response => console.log(response.status))
-                     .catch(err => console.warn(err));
-          }
-    //remove file playing logic from here
-    const videoURI = `http://localhost:8080/api/download?token=${props.globalData.token}`;
+    const openBelt = (beltid) =>{
+        console.log(beltid);
+    };
 
     return (
-    <Card className={classes.root}>
-        <CardContent>
-            <Typography variant="h5" component="h2">
-            {props.desc}
-            </Typography>
-        </CardContent>
-        <CardContent>
-            {props.type==='v'?(<div style={{width:250}}>
-                <Player
-                playsInline
-                preload='none'
-                fluid='false'
-                src={videoURI}
-                />
-                </div>):(null)
-            }
-        </CardContent>
-        <CardActions>
-            {props.type==='v'?(
-                <form>
-                    <FormGroup controlId='uploadFormId'>
-                        <input type="file" name="file" onChange={onChangeHandler}/>
-                    </FormGroup>
-                </form>
-            ):(null)}
-        </CardActions>
-    </Card>
+        <Card className={classes.root}>
+            <CardContent>
+                <Typography variant="h5" component="h2">
+                {props.desc}
+                </Typography>
+                {props.type==='v'?(
+                    <div className={classes.paper}>
+                        {props.globalData.commonData.belts.map(belt=>(
+                            <Button key={belt.beltId} beltid={belt.beltId} onClick={()=>{openBelt(belt.beltId)}}>
+                                {belt.beltColor}</Button>
+                            )
+                        )}
+                    </div>
+                ):(null)}
+            </CardContent>
+        </Card>
     );
     }
 

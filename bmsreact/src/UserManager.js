@@ -1,8 +1,7 @@
-import React, {useState, useEffect} from "react";
+import React from "react";
 import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import { makeStyles } from '@material-ui/core/styles';
 import PersonIcon from '@material-ui/icons/Person';
 
 import {restCall} from './utils/RestComponent'
@@ -18,10 +17,8 @@ const UserManager = props => {
         setAnchorEl(null);
     };
 
-    const [apiRet, setApiRet] = useState({});
-
     const logout = () => {
-        restCall('POST', `${props.globalData.serverURI}/api/logout`, setApiRet, props.globalData.token);
+        restCall('POST', `${props.globalData.serverURI}/api/logout`, null, props.globalData.token);
         localStorage.clear();
         const newProps = {page:'login', serverURI:`${props.globalData.serverURI}`};
         newProps.page='login';
