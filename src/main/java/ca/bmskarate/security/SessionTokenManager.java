@@ -15,14 +15,14 @@ public class SessionTokenManager {
 
     private static long sessionTimeOut=4*60*60*1000;
 
-    public static Authentication getToken(String token){
+    public static Authentication getToken(String token, String addr){
         Date dte = new Date();
         if(token==null)
             return null;
 
         SessionCache session = sessionCache.get(token);
 
-        if(session!=null) {
+        if(session!=null && session.getAuth().equals(addr)) {
             if (session.getTs() > dte.getTime() + sessionTimeOut) {
                 removeToken(token);
                 return null;
@@ -38,11 +38,11 @@ public class SessionTokenManager {
         sessionCache.remove(token);
     }
 
-    public static String setToken(Authentication auth){
+    public static String setToken(Authentication auth, String addr){
         String token = generateSessionToken();
         Date dte = new Date();
 
-        SessionCache session = new SessionCache(auth, dte.getTime());
+        SessionCache session = new SessionCache(auth, dte.getTime(), addr);
         sessionCache.put(token, session);
 
         //clean up old sessions to free memory
@@ -67,10 +67,12 @@ public class SessionTokenManager {
     private static class SessionCache{
         Authentication auth;
         long ts;
+        String addr;
 
-        public SessionCache(Authentication auth, long ts) {
+        public SessionCache(Authentication auth, long ts, String addr) {
             this.auth = auth;
             this.ts = ts;
+            this.addr = addr;
         }
     }
 }

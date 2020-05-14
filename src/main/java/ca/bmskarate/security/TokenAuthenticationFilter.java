@@ -19,7 +19,8 @@ public class TokenAuthenticationFilter extends GenericFilterBean {
         final HttpServletRequest httpRequest = (HttpServletRequest)servletRequest;
 
         final String accessToken = httpRequest.getHeader("X-SESSION-ID");
-        Authentication authentication = SessionTokenManager.getToken(accessToken);
+
+        Authentication authentication = SessionTokenManager.getToken(accessToken, servletRequest.getRemoteAddr());
 
         if(authentication!=null)
             SecurityContextHolder.getContext().setAuthentication(authentication);

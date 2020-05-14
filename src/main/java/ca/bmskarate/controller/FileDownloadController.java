@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 
@@ -21,8 +22,8 @@ import java.io.*;
 @RequestMapping("/api")
 public class FileDownloadController {
     @GetMapping(value = "/download")
-    public ResponseEntity<StreamingResponseBody> download(@RequestParam String token, final HttpServletResponse response) throws BmsException {
-        Authentication auth = SessionTokenManager.getToken(token);
+    public ResponseEntity<StreamingResponseBody> download(@RequestParam String token, final HttpServletRequest request, final HttpServletResponse response) throws BmsException {
+        Authentication auth = SessionTokenManager.getToken(token, request.getRemoteAddr());
         if(auth==null || auth.getPrincipal()==null)
             throw new BmsException(APIErrors.UNAUTHORISED);
 

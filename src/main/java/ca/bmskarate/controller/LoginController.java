@@ -48,7 +48,7 @@ public class LoginController {
             userVo.setSecretAns("");
 
             resp.setUser(userVo);
-            resp.setToken(SessionTokenManager.setToken(authentication));
+            resp.setToken(SessionTokenManager.setToken(authentication, httpServletRequest.getRemoteAddr()));
             return ResponseEntity.ok(resp);
         }
 

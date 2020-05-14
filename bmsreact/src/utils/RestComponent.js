@@ -9,14 +9,15 @@ export const restCall = async(method, endpoint, setApiRet, token, data) =>{
          data:data
         }
     ).then((response) => {
-        if(setApiRet)
+        if(setApiRet!=null && setApiRet !== undefined)
             setApiRet(response.data);
     }, (error) => {
         if(error.response.data.message !== null && error.response.data.message !== 'No message available' && error.response.data.message !== ''){
             var errorStr = {error:`${error.response.data.message}`}
-            setApiRet(errorStr);
+            if(setApiRet!=null && setApiRet !== undefined)
+                setApiRet(errorStr);
         }
-        else
+        else if(setApiRet!=null && setApiRet !== undefined)
             setApiRet({error:'Error Connecting to Server'});
     });
 };
