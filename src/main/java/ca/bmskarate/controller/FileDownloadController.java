@@ -20,7 +20,7 @@ import java.io.*;
 @RestController
 @RequestMapping("/api")
 public class FileDownloadController {
-    @GetMapping(value = "/download", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/download")
     public ResponseEntity<StreamingResponseBody> download(@RequestParam String token, final HttpServletResponse response) throws BmsException {
         Authentication auth = SessionTokenManager.getToken(token);
         if(auth==null || auth.getPrincipal()==null)

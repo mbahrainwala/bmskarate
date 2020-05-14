@@ -3,10 +3,15 @@ import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import { Player, ControlBar  } from 'video-react';
+import { Player} from 'video-react';
 import "./video-react.css";
+import axios from 'axios';
+
+
+import {
+  FormGroup,
+} from "@material-ui/core";
 
 const useStyles = makeStyles({
   root: {
@@ -27,12 +32,23 @@ const useStyles = makeStyles({
 
 const ActionCard = props => {
 const classes = useStyles();
-  const bull = <span className={classes.bullet}>•</span>;
-  const videoURI = `http://localhost:8080/api/download?token=${props.globalData.token}`;
 
-  const launch = () =>{
-    if(props.type === 'user'){}
-  }
+    const onChangeHandler=event=>{
+                var data = new FormData()
+               data.append('file', event.target.files[0])
+               data.append('type', 'V')
+               data.append('belt', '0')
+              console.log(data);
+            axios.post(`${props.globalData.serverURI}/api/uploadTrainingVideo`, data,
+                         {headers: {
+                               'Content-Type': 'multipart/form-data'
+                         }}
+                     )
+                     .then(response => console.log(response.status))
+                     .catch(err => console.warn(err));
+          }
+    //remove file playing logic from here
+    const videoURI = `http://localhost:8080/api/download?token=${props.globalData.token}`;
 
     return (
     <Card className={classes.root}>
@@ -54,7 +70,11 @@ const classes = useStyles();
         </CardContent>
         <CardActions>
             {props.type==='v'?(
-                <input type="file" name="file" id="file"/>
+                <form>
+                    <FormGroup controlId='uploadFormId'>
+                        <input type="file" name="file" onChange={onChangeHandler}/>
+                    </FormGroup>
+                </form>
             ):(null)}
         </CardActions>
     </Card>
