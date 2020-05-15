@@ -7,8 +7,7 @@ const MainApp = props => {
     return(
         <div>
             {props.globalData.appPage==='editUser'?(<EditUser
-                globalData={props.globalData}
-                fromProfile='true'/>):null}
+                globalData={props.globalData} />):null}
             {props.globalData.appPage==='listUser'?(<ListUsers globalData={props.globalData} setGlobalData={props.setGlobalData}
                  token={props.globalData.token} serverURI={props.globalData.serverURI}/>):null}
             {props.globalData.appPage==='default'?(<>

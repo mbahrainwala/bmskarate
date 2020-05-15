@@ -76,11 +76,6 @@ public class UserController {
                 throw new BmsException("User is not allowed to change user type.");
             }
 
-            if(!UserService.AllowedUserTypes.A.toString().equals(principal.getType())
-                    && !userReq.getSesnei().equals(origUser.getSesnei())){
-                throw new BmsException("User is not allowed to change sensei status.");
-            }
-
             if(userReq.getPremium()==null)
                 userReq.setPremium(origUser.getPremium());
 

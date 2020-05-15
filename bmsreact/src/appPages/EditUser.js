@@ -6,26 +6,24 @@ import {
   Input,
   Button,
   MenuItem,
-  Select,
-  RadioGroup,
-  FormControlLabel,
-  Radio
+  Select
 } from "@material-ui/core";
 
 import {restCall} from '../utils/RestComponent'
 
-
-const EditUser = props => {
-    var editState = {
+var editState = {
 
     };
 
+const EditUser = props => {
+
     const [apiRet, setApiRet] = useState({});
 
+    const disabled = props.globalData.editUser.id === props.globalData.loginUser.id?(true):(false)
+
     useEffect(() => {
-        if(Object.getOwnPropertyNames(editState).length === 0){
+        if(Object.getOwnPropertyNames(editState).length === 0 || editState.id!==props.globalData.editUser.id){
             editState={...props.globalData.editUser};
-            console.log(editState);
         }
         if(apiRet==='Update Successful'){
             editState={...props.globalData.editUser};
@@ -57,6 +55,12 @@ const EditUser = props => {
         if(event.target.id==='confirmPassword')
             editState.confirmPassword = event.target.value;
 
+        if(event.target.id==='type')
+            editState.type = event.target.value;
+
+        if(event.target.id==='sesnei')
+            editState.sesnei = event.target.value;
+
         editState.cityId = props.globalData.editUser.cityVo.id;
         editState.secretQues = props.globalData.editUser.secretQues;
     };
@@ -82,11 +86,11 @@ const EditUser = props => {
             padding: 20
             }}
         >
-            <form style={{ width: "50%" }} onChange={handleChange.bind(this)}>
+            <form style={{ width: "80%" }} onChange={handleChange.bind(this)}>
                 <h1>Edit User</h1>
                 {apiRet.error !== undefined?(<FormLabel component="legend">{apiRet.error}</FormLabel>):(<></>)}
-                {apiRet==='Update Successful' && props.fromProfile==='true'?(<FormLabel component="legend">
-                    Please logout and log back in to see your changes.
+                {apiRet==='Update Successful'?(<FormLabel component="legend">
+                    The User should logout and log back in to see your updated changes.
                     </FormLabel>):(<>
 
                 <FormControl margin="normal" fullWidth>
@@ -125,28 +129,30 @@ const EditUser = props => {
                 </FormControl>
 
 
-                <FormControl margin="normal" fullWidth>
-                    <InputLabel htmlFor="type-lable">User type</InputLabel>
-                    <Select
-                      labelId="type"
-                      id="type"
-                      defaultValue={props.globalData.editUser.type}
-                      onChange={handleTypeChange}
-                      disabled={props.fromProfile}
-                    >
-                      <MenuItem value='U'>User</MenuItem>
-                      <MenuItem value='A'>Admin</MenuItem>
-                      <MenuItem value='S'>Super User</MenuItem>
-                    </Select>
-                </FormControl>
-                <p/>
-                <FormControl>
-                  <FormLabel component="legend">Is Sensei</FormLabel>
-                  <RadioGroup aria-label="sensei" name="sensei" defaultValue={props.globalData.editUser.sesnei} onChange={handleChange}>
-                    <FormControlLabel value="Y" disabled={props.fromProfile} control={<Radio />} label="Yes" />
-                    <FormControlLabel value="N" disabled={props.fromProfile} control={<Radio />} label="No" />
-                  </RadioGroup>
-                </FormControl>
+                {disabled===true?(
+                    <FormControl margin="normal" fullWidth>
+                        {props.globalData.editUser.type==='U'?(<>User</>):(null)}
+                        {props.globalData.editUser.type==='A'?(<div style={{color:'blue'}}>Admin</div>):(null)}
+                        {props.globalData.editUser.type==='S'?(<div style={{color:'red'}}>Super User</div>):(null)}
+                    </FormControl>):(
+                    <>
+                        <FormControl margin="normal" fullWidth>
+                            <InputLabel htmlFor="type-lable">User type</InputLabel>
+                            <Select
+                              labelId="type"
+                              id="type"
+                              defaultValue={props.globalData.editUser.type}
+                              onChange={handleTypeChange}
+                            >
+                              <MenuItem value='U'>User</MenuItem>
+                              <MenuItem value='A'>Admin</MenuItem>
+                              <MenuItem value='S'>Super User</MenuItem>
+                            </Select>
+                        </FormControl>
+                        <p/>
+                    </>
+                )}
+
 
                 <FormControl margin="normal" fullWidth>
                     <InputLabel htmlFor="answer">What is your mothers maiden name</InputLabel>

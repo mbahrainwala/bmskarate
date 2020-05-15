@@ -24,7 +24,6 @@ public class UserDto {
     String secretAns;
     int cityId;
 
-    String sesnei;
     String type;
 
     String oldPassword;
@@ -42,7 +41,6 @@ public class UserDto {
         userVo.setPostalCode(this.getPostalCode()!=null?this.getPostalCode().trim():null);
         userVo.setType(this.getType());
         userVo.setPhone(this.getPhone());
-        userVo.setSesnei(this.getSesnei());
         userVo.setPremium(this.getPremium());
         userVo.setCityVo(city);
 
