@@ -45,7 +45,7 @@ public class StudentVo implements Cloneable{
     @LazyCollection(LazyCollectionOption.FALSE)
     List<StudentVideoVo> video;
 
-    @Column(name="photo", length = 512, nullable=false)
+    @Column(name="photo", length = 512)
     String photo;
 
     @OneToMany

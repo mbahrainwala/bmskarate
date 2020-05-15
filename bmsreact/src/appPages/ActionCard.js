@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
         flexWrap: 'wrap',
         '& > *': {
         margin: theme.spacing(0),
-        width: theme.spacing(18),
+        width: theme.spacing(20),
         height: theme.spacing(6),
         },
     },
@@ -53,8 +53,18 @@ const ActionCard = props => {
                                                     props.setGlobalData(newProps);
                             }}>Open</Button>
                     </div>
-                    ):(null)
+                    ):null
                 }
+                {props.type==='s'?(<>
+                    {props.globalData.loginUser.type !== 'U'?(
+                        <div className={classes.paper}>
+                            <Button color="primary" key='addStudent' onClick={()=>{}}>
+                                Add Student</Button>
+                            <Button color="primary" key='listStudent' onClick={()=>{}}>
+                                Show Students</Button>
+                        </div>
+                    ):null}
+                </>):null}
                 {props.type==='v'?(
                     <div className={classes.paper}>
                         {props.globalData.commonData.belts.map(belt=>(
@@ -63,7 +73,7 @@ const ActionCard = props => {
                             )
                         )}
                     </div>
-                ):(null)}
+                ):null}
             </CardContent>
         </Card>
     );

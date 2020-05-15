@@ -73,7 +73,7 @@ public class UserController {
 
             if(!UserService.AllowedUserTypes.S.toString().equals(principal.getType())
                     && !origUser.getType().equals(userReq.getType())){
-                throw new BmsException("User is not allowed to change user type.");
+                userReq.setType(origUser.getType());
             }
 
             if(userReq.getPremium()==null)

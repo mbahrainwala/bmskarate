@@ -66,9 +66,6 @@ public class UserVo implements Cloneable{
     @Column(name="lastloggedin")
     Date lastLoggedIn;
 
-    @Column(name="sensei", length = 1, nullable=false)
-    String sesnei;
-
     @ManyToOne(cascade=CascadeType.ALL)
     @NotNull
     @Valid
@@ -109,7 +106,6 @@ public class UserVo implements Cloneable{
         vo.setSecretAns(secretAns);
         vo.setCreatedDate(createdDate);
         vo.setLastLoggedIn(lastLoggedIn);
-        vo.setSesnei(sesnei);
 
         vo.setCityVo(cityVo.clone());
 

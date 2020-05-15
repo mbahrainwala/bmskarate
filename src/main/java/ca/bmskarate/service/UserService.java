@@ -90,7 +90,6 @@ public class UserService {
 
             vo.setPremium(YesNo.N.toString());
             vo.setType(AllowedUserTypes.U.toString());
-            vo.setSesnei(YesNo.N.toString());
             vo.setCreatedDate(new Date());
         }else{
             //user already exists
