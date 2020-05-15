@@ -5,6 +5,7 @@ import ca.bmskarate.repositories.StudentRepository;
 import ca.bmskarate.util.Belt;
 import ca.bmskarate.vo.StudentVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -40,6 +41,11 @@ public class StudentService {
             return students.get(0);
 
         return null;
+    }
+
+    @Transactional
+    public List<StudentVo> findByLastName(String lastName){
+        return studentRepository.findByLastNameStartsWith(lastName, Sort.by("lastName").and(Sort.by("firstName")));
     }
 
     private String validateStudent(StudentVo vo){

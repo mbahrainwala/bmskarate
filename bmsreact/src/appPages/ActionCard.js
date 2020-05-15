@@ -60,7 +60,11 @@ const ActionCard = props => {
                         <div className={classes.paper}>
                             <Button color="primary" key='addStudent' onClick={()=>{}}>
                                 Add Student</Button>
-                            <Button color="primary" key='listStudent' onClick={()=>{}}>
+                            <Button color="primary" key='listStudent' onClick={()=>{
+                                    const newProps = {...props.globalData};
+                                                        newProps.appPage='listStudent';
+                                                        props.setGlobalData(newProps);
+                                }}>
                                 Show Students</Button>
                         </div>
                     ):null}
