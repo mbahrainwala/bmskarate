@@ -169,10 +169,11 @@ const EditUser = props => {
                     <Input id="confirmPassword" type="password" />
                 </FormControl>
 
+                {disabled===false?(null):(
                 <FormControl margin="normal" fullWidth>
                     <InputLabel htmlFor="oldpass">Existing Password</InputLabel>
                     <Input id="oldpass" type="password" />
-                </FormControl>
+                </FormControl>)}
 
                 <Button variant="contained" color="primary" size="medium" onClick={editUser}>
                     Send
