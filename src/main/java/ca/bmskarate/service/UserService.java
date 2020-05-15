@@ -67,7 +67,7 @@ public class UserService {
     @Transactional
     public List<UserVo> getUserByLastNameLike(String lastName){
 
-        List<UserVo> userList = userRepository.findByLastNameLikeIgnoreCase(lastName, Sort.by("lastName").and(Sort.by("firstName")));
+        List<UserVo> userList = userRepository.findByLastNameStartsWith(lastName, Sort.by("lastName").and(Sort.by("firstName")));
 
         return userList;
     }

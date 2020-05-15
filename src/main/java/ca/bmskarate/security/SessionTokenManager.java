@@ -22,7 +22,7 @@ public class SessionTokenManager {
 
         SessionCache session = sessionCache.get(token);
 
-        if(session!=null && session.getAuth().equals(addr)) {
+        if(session!=null && session.getAddr().equals(addr)) {
             if (session.getTs() > dte.getTime() + sessionTimeOut) {
                 removeToken(token);
                 return null;

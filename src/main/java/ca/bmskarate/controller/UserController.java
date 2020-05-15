@@ -12,13 +12,13 @@ import ca.bmskarate.vo.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.NotNull;
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -103,7 +103,21 @@ public class UserController {
             return ResponseEntity.ok("Invalid userId");
     }
 
-    //TODO:write method to get users by lastname
+    @RequestMapping(value = "/api/findUser", method = RequestMethod.GET)
+    public ResponseEntity<List<UserVo>> findUser(Principal auth, @RequestParam @NotNull String lastName) throws BmsException {
+        if(auth==null)
+            throw new BmsException(APIErrors.UNAUTHORISED);
+
+        UserVo principal = (UserVo) ((UsernamePasswordAuthenticationToken)auth).getPrincipal();
+
+        if(UserService.AllowedUserTypes.U.toString().equals(principal.getType()))
+            throw new BmsException(APIErrors.NOACCESS);
+
+        if(lastName.trim().isEmpty())
+            return ResponseEntity.ok(new ArrayList<>());
+        return ResponseEntity.ok(userService.getUserByLastNameLike(lastName.trim()));
+    }
+
     private UserVo getUser(UserRequest req) throws BmsException {
         Optional<CityVo> cityVo = cityService.findCityById(req.getCityId());
 

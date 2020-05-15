@@ -45,6 +45,16 @@ const ActionCard = props => {
                 <Typography variant="h5" component="h2">
                 {props.desc}
                 </Typography>
+                {props.type==='u'?(
+                    <div className={classes.paper}>
+                        <Button color="primary" size="medium" key='users' onClick={()=>{
+                                const newProps = {...props.globalData};
+                                                    newProps.appPage='listUser';
+                                                    props.setGlobalData(newProps);
+                            }}>Open</Button>
+                    </div>
+                    ):(null)
+                }
                 {props.type==='v'?(
                     <div className={classes.paper}>
                         {props.globalData.commonData.belts.map(belt=>(
