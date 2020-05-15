@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class StudentService {
@@ -21,7 +23,23 @@ public class StudentService {
             throw new BmsException(errors);
         }
 
+        StudentVo student = findByNumber(vo.getNumber());
+        if(student!=null && student.getId()!=vo.getId())
+            throw new BmsException("Student Number Exists.");
+
         studentRepository.save(vo);
+    }
+
+    @Transactional
+    public Optional<StudentVo> findStudentById(long id){return studentRepository.findById(id);}
+
+    @Transactional
+    public StudentVo findByNumber(String number){
+        List<StudentVo> students = studentRepository.findByNumber(number);
+        if(students!=null && students.size()>0)
+            return students.get(0);
+
+        return null;
     }
 
     private String validateStudent(StudentVo vo){
