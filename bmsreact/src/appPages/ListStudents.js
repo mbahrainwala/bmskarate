@@ -86,7 +86,9 @@ const ListStudents = props => {
                                         {student.number}
                                     </TableCell>
                                     <TableCell scope="row">
-
+                                        {props.globalData.commonData.belts.map(belt=>(
+                                            <>{belt.beltId===student.belt?(<>{belt.beltColor}</>):null}</>
+                                        ))}
                                     </TableCell>
                                     <TableCell scope="row">
                                         {student.stripes}
