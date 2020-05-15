@@ -17,7 +17,7 @@ const MainApp = props => {
              {props.globalData.appPage==='listStudent'?(<ListStudents globalData={props.globalData} setGlobalData={props.setGlobalData}
                   token={props.globalData.token} serverURI={props.globalData.serverURI}/>):null}
 
-            {props.globalData.appPage==='addEditUser'?(<AddEditStudent globalData={props.globalData} setGlobalData={props.setGlobalData}/>):null}
+            {props.globalData.appPage==='addEditStudent'?(<AddEditStudent globalData={props.globalData} setGlobalData={props.setGlobalData}/>):null}
 
             {props.globalData.appPage==='default'?(<>
                 {props.globalData.loginUser.type !== 'U' ? (

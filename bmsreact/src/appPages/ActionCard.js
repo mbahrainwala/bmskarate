@@ -58,12 +58,17 @@ const ActionCard = props => {
                 {props.type==='s'?(<>
                     {props.globalData.loginUser.type !== 'U'?(
                         <div className={classes.paper}>
-                            <Button color="primary" key='addStudent' onClick={()=>{}}>
+                            <Button color="primary" key='addStudent' onClick={()=>{
+                                    const newProps = {...props.globalData};
+                                        newProps.appPage='addEditStudent';
+                                        newProps.setStudentId=0;
+                                        props.setGlobalData(newProps);
+                                }}>
                                 Add Student</Button>
                             <Button color="primary" key='listStudent' onClick={()=>{
                                     const newProps = {...props.globalData};
-                                                        newProps.appPage='listStudent';
-                                                        props.setGlobalData(newProps);
+                                        newProps.appPage='listStudent';
+                                        props.setGlobalData(newProps);
                                 }}>
                                 Show Students</Button>
                         </div>

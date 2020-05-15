@@ -75,7 +75,7 @@ const ListStudents = props => {
                         && Object.getOwnPropertyNames(apiRet).length !== 0?(
                         <>
                             {apiRet.map(student=>(
-                                <TableRow key='{student.id}'>
+                                <TableRow key={student.id}>
                                     <TableCell component="th" scope="row">
                                         {student.firstName}
                                     </TableCell>
@@ -97,6 +97,7 @@ const ListStudents = props => {
                                         <Button onClick={()=>{
                                             const newProps = {...props.globalData};
                                             newProps.appPage='editStudent';
+                                            newProps.setStudentId=student.id;
                                             props.setGlobalData(newProps);
                                             }}>Edit</Button>
                                     </TableCell>
