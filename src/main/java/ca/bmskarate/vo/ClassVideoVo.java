@@ -12,7 +12,7 @@ import java.util.Date;
 @Getter
 @Setter
 @NoArgsConstructor
-public class ClassVideoVo {
+public class ClassVideoVo implements Cloneable{
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name="id")

@@ -14,21 +14,23 @@ import {
 
 import {restCall} from '../utils/RestComponent'
 
-var editState = {
-
-      };
 
 const EditUser = props => {
+    var editState = {
+
+    };
+
     const [apiRet, setApiRet] = useState({});
 
     useEffect(() => {
         if(Object.getOwnPropertyNames(editState).length === 0){
-            editState={...props.userData};
+            editState={...props.globalData.editUser};
+            console.log(editState);
         }
         if(apiRet==='Update Successful'){
-            editState={...props.userData};
+            editState={...props.globalData.editUser};
         }
-    },[apiRet, props.userData]);
+    },[apiRet, props.globalData.editUser]);
 
     function handleChange(event) {
         if(event.target.id==='fname')
@@ -55,8 +57,8 @@ const EditUser = props => {
         if(event.target.id==='confirmPassword')
             editState.confirmPassword = event.target.value;
 
-        editState.cityId = props.userData.cityVo.id;
-        editState.secretQues = props.userData.secretQues;
+        editState.cityId = props.globalData.editUser.cityVo.id;
+        editState.secretQues = props.globalData.editUser.secretQues;
     };
 
     function handleTypeChange(event) {
@@ -64,11 +66,11 @@ const EditUser = props => {
     }
 
     const editUser = () =>{
-        editState.cityId = props.userData.cityVo.id;
-        editState.secretQues = props.userData.secretQues;
-        editState.id = props.userData.id;
+        editState.cityId = props.globalData.editUser.cityVo.id;
+        editState.secretQues = props.globalData.editUser.secretQues;
+        editState.id = props.globalData.editUser.id;
 
-        restCall('POST', `${props.serverURI}/api/updateUser`, setApiRet, props.token, editState);
+        restCall('POST', `${props.globalData.serverURI}/api/updateUser`, setApiRet, props.globalData.token, editState);
     };
 
     return(
@@ -89,37 +91,37 @@ const EditUser = props => {
 
                 <FormControl margin="normal" fullWidth>
                     <InputLabel htmlFor="emailId">Email Id</InputLabel>
-                    <Input id="emailId" type="text" value={props.userData.emailId}/>
+                    <Input id="emailId" type="text" value={props.globalData.editUser.emailId}/>
                 </FormControl>
 
                 <FormControl margin="normal" fullWidth>
                     <InputLabel htmlFor="fname">First Name</InputLabel>
-                    <Input id="fname" type="text" defaultValue={props.userData.firstName}/>
+                    <Input id="fname" type="text" defaultValue={props.globalData.editUser.firstName}/>
                 </FormControl>
 
                 <FormControl margin="normal" fullWidth>
                     <InputLabel htmlFor="lname">Last Name</InputLabel>
-                    <Input id="lname" type="text" defaultValue={props.userData.lastName}/>
+                    <Input id="lname" type="text" defaultValue={props.globalData.editUser.lastName}/>
                 </FormControl>
 
                 <FormControl margin="normal" fullWidth>
                     <InputLabel htmlFor="phone">Phone (XXX-XXX-XXXX)</InputLabel>
-                    <Input id="phone" type="text" defaultValue={props.userData.phone}/>
+                    <Input id="phone" type="text" defaultValue={props.globalData.editUser.phone}/>
                 </FormControl>
 
                 <FormControl margin="normal" fullWidth>
                     <InputLabel htmlFor="add1">Address Line 1</InputLabel>
-                    <Input id="addr1" type="text" defaultValue={props.userData.addr1}/>
+                    <Input id="addr1" type="text" defaultValue={props.globalData.editUser.addr1}/>
                 </FormControl>
 
                 <FormControl margin="normal" fullWidth>
                     <InputLabel htmlFor="add2">Address Line 2</InputLabel>
-                    <Input id="addr2" type="text" defaultValue={props.userData.addr2}/>
+                    <Input id="addr2" type="text" defaultValue={props.globalData.editUser.addr2}/>
                 </FormControl>
 
                 <FormControl margin="normal" fullWidth>
                     <InputLabel htmlFor="postal">Postal Code</InputLabel>
-                    <Input id="postal" type="text" defaultValue={props.userData.postalCode}/>
+                    <Input id="postal" type="text" defaultValue={props.globalData.editUser.postalCode}/>
                 </FormControl>
 
 
@@ -128,7 +130,7 @@ const EditUser = props => {
                     <Select
                       labelId="type"
                       id="type"
-                      defaultValue={props.userData.type}
+                      defaultValue={props.globalData.editUser.type}
                       onChange={handleTypeChange}
                       disabled={props.fromProfile}
                     >
@@ -140,7 +142,7 @@ const EditUser = props => {
                 <p/>
                 <FormControl>
                   <FormLabel component="legend">Is Sensei</FormLabel>
-                  <RadioGroup aria-label="sensei" name="sensei" defaultValue={props.userData.sesnei} onChange={handleChange}>
+                  <RadioGroup aria-label="sensei" name="sensei" defaultValue={props.globalData.editUser.sesnei} onChange={handleChange}>
                     <FormControlLabel value="Y" disabled={props.fromProfile} control={<Radio />} label="Yes" />
                     <FormControlLabel value="N" disabled={props.fromProfile} control={<Radio />} label="No" />
                   </RadioGroup>

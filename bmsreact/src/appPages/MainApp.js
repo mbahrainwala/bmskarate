@@ -6,10 +6,10 @@ import ListUsers from './ListUsers'
 const MainApp = props => {
     return(
         <div>
-            {props.globalData.appPage==='editUser'?(<EditUser userData={props.globalData.loginUser}
-                token={props.globalData.token} serverURI={props.globalData.serverURI}
+            {props.globalData.appPage==='editUser'?(<EditUser
+                globalData={props.globalData}
                 fromProfile='true'/>):null}
-            {props.globalData.appPage==='listUser'?(<ListUsers globalData={props.globalData}
+            {props.globalData.appPage==='listUser'?(<ListUsers globalData={props.globalData} setGlobalData={props.setGlobalData}
                  token={props.globalData.token} serverURI={props.globalData.serverURI}/>):null}
             {props.globalData.appPage==='default'?(<>
                 {props.globalData.loginUser.type !== 'U' ? (

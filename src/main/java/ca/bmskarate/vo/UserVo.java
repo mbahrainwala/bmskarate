@@ -18,7 +18,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserVo {
+public class UserVo implements Cloneable{
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="id")
@@ -90,5 +90,34 @@ public class UserVo {
 
     public void setSecAnsAsEncrypt(String secAns){
         this.setSecretAns(SecurityUtils.getMD5Hash(secAns));
+    }
+
+    public UserVo clone() throws CloneNotSupportedException {
+        UserVo vo = new UserVo();
+        vo.setId(id);
+        vo.setType(type);
+        vo.setEmailId(emailId);
+        vo.setPhone(phone);
+        vo.setPassword(password);
+        vo.setFirstName(firstName);
+        vo.setLastName(lastName);
+        vo.setAddr1(addr1);
+        vo.setAddr2(addr2);
+        vo.setPostalCode(postalCode);
+        vo.setPremium(premium);
+        vo.setSecretQues(secretQues);
+        vo.setSecretAns(secretAns);
+        vo.setCreatedDate(createdDate);
+        vo.setLastLoggedIn(lastLoggedIn);
+        vo.setSesnei(sesnei);
+
+        vo.setCityVo(cityVo.clone());
+
+        vo.setStudents(students);
+
+        vo.setPhoto(photo);
+        vo.setDisabled(disabled);
+
+        return vo;
     }
 }

@@ -51,9 +51,10 @@ const UserManager = props => {
                    >
                      <MenuItem onClick={()=>{
                         const newProps = {...props.globalData};
-                                            newProps.appPage='editUser';
-                                            props.setGlobalData(newProps);
-                                            handleClose();
+                                newProps.appPage='editUser';
+                                newProps.editUser=props.globalData.loginUser;
+                                props.setGlobalData(newProps);
+                                handleClose();
                         }}>Profile</MenuItem>
                      <MenuItem onClick={logout}>Logout</MenuItem>
                    </Menu>

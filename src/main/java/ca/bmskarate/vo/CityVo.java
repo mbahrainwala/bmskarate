@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @NoArgsConstructor
-public class CityVo {
+public class CityVo implements Cloneable{
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="id")
@@ -28,4 +28,13 @@ public class CityVo {
     @Valid
     @JoinColumn(name = "province_id")
     private ProvinceVo province;
+
+    public CityVo clone() throws CloneNotSupportedException {
+        super.clone();
+        CityVo vo = new CityVo();
+        vo.setId(id);
+        vo.setCityName(cityName);
+        vo.setProvince(province);
+        return vo;
+    }
 }

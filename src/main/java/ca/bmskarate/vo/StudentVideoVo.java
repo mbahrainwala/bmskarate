@@ -14,7 +14,7 @@ import java.util.Date;
 @Getter
 @Setter
 @NoArgsConstructor
-public class StudentVideoVo {
+public class StudentVideoVo implements Cloneable{
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name="id")
@@ -25,6 +25,12 @@ public class StudentVideoVo {
 
     @Column(name="description", length=512, nullable=false)
     private String description;
+
+    @Column(name="belt", nullable=false)
+    private int belt;
+
+    @Column(name="comments", length=4000, nullable=false)
+    private String comments;
 
     @ManyToOne
     @NotNull

@@ -1,12 +1,11 @@
 package ca.bmskarate.controller;
 
-import ca.bmskarate.controller.request.UserRequest;
+import ca.bmskarate.dto.UserDto;
 import ca.bmskarate.exception.BmsException;
 import ca.bmskarate.service.CityService;
 import ca.bmskarate.service.UserService;
 import ca.bmskarate.util.APIErrors;
 import ca.bmskarate.util.SecurityUtils;
-import ca.bmskarate.util.YesNo;
 import ca.bmskarate.vo.CityVo;
 import ca.bmskarate.vo.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,20 +29,33 @@ public class UserController {
     CityService cityService;
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ResponseEntity<String> register(@RequestBody UserRequest userReq, HttpServletRequest httpServletRequest) throws BmsException {
-        userService.saveUser(getUser(userReq));
+    public ResponseEntity<String> register(@RequestBody UserDto userReq, HttpServletRequest httpServletRequest) throws BmsException {
+
+        Optional<CityVo> cityVo = cityService.findCityById(userReq.getCityId());
+        if(cityVo!=null && cityVo.isPresent()) {
+            userService.saveUser(userReq.getUserVo(cityVo.get()));
+        }else {
+            throw new BmsException("City Not Found");
+        }
 
         return ResponseEntity.ok("registration successful");
     }
 
     @RequestMapping(value = "/forgot", method = RequestMethod.POST)
-    public ResponseEntity<String> forgot(@RequestBody UserRequest userReq, HttpServletRequest httpServletRequest) throws BmsException {
-        userService.forgotPassword(getUser(userReq));
+    public ResponseEntity<String> forgot(@RequestBody UserDto userReq, HttpServletRequest httpServletRequest) throws BmsException {
+
+        Optional<CityVo> cityVo = cityService.findCityById(userReq.getCityId());
+        if(cityVo!=null && cityVo.isPresent()) {
+            userService.forgotPassword(userReq.getUserVo(cityVo.get()));
+        }else {
+            throw new BmsException("City Not Found");
+        }
+
         return ResponseEntity.ok("reset successful");
     }
 
     @RequestMapping(value = "/api/updateUser", method = RequestMethod.POST)
-    public ResponseEntity<String> updateUser(Principal auth, @RequestBody UserRequest userReq, HttpServletRequest httpServletRequest) throws BmsException {
+    public ResponseEntity<String> updateUser(Principal auth, @RequestBody UserDto userReq, HttpServletRequest httpServletRequest) throws BmsException {
         if(auth==null)
             throw new BmsException(APIErrors.UNAUTHORISED);
 
@@ -77,8 +89,15 @@ public class UserController {
                 throw new BmsException("User is not allowed to change membership.");
             }
 
+            UserVo newUser;
+            Optional<CityVo> cityVo = cityService.findCityById(userReq.getCityId());
+            if(cityVo!=null && cityVo.isPresent()) {
+                newUser = userReq.getUserVo(cityVo.get());
+            }else {
+                throw new BmsException("City Not Found");
+            }
+
             //handle sensitive data encryption
-            UserVo newUser = getUser(userReq);
             if(userReq.getPassword()==null || userReq.getPassword().trim().isEmpty())
                 newUser.setPassword(origUser.getPassword());
             else{
@@ -104,7 +123,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/api/findUser", method = RequestMethod.GET)
-    public ResponseEntity<List<UserVo>> findUser(Principal auth, @RequestParam @NotNull String lastName) throws BmsException {
+    public ResponseEntity<List<UserVo>> findUser(Principal auth, @RequestParam @NotNull String lastName) throws BmsException, CloneNotSupportedException {
         if(auth==null)
             throw new BmsException(APIErrors.UNAUTHORISED);
 
@@ -115,34 +134,16 @@ public class UserController {
 
         if(lastName.trim().isEmpty())
             return ResponseEntity.ok(new ArrayList<>());
-        return ResponseEntity.ok(userService.getUserByLastNameLike(lastName.trim()));
-    }
 
-    private UserVo getUser(UserRequest req) throws BmsException {
-        Optional<CityVo> cityVo = cityService.findCityById(req.getCityId());
-
-        if(cityVo!=null && cityVo.isPresent()) {
-            UserVo userVo = new UserVo();
-            userVo.setId(req.getId());
-            userVo.setEmailId(req.getEmailId()!=null?req.getEmailId().trim():null);
-            userVo.setPasswordAsEncrypt(req.getPassword()!=null?req.getPassword().trim():null);
-            userVo.setFirstName(req.getFirstName()!=null?req.getFirstName().trim():null);
-            userVo.setLastName(req.getLastName()!=null?req.getLastName().trim():null);
-            userVo.setAddr1(req.getAddr1()!=null?req.getAddr1().trim():null);
-            userVo.setAddr2(req.getAddr2()!=null?req.getAddr2().trim():null);
-            userVo.setPostalCode(req.getPostalCode()!=null?req.getPostalCode().trim():null);
-            userVo.setCityVo(cityVo.get());
-            userVo.setType(req.getType());
-            userVo.setPhone(req.getPhone());
-            userVo.setSesnei(req.getSesnei());
-            userVo.setPremium(req.getPremium());
-
-            userVo.setSecAnsAsEncrypt(req.getSecretAns()!=null?req.getSecretAns().trim():null);
-            userVo.setSecretQues(req.getSecretQues()!=null?req.getSecretQues().trim():null);
-            return userVo;
+        List<UserVo> userList = userService.getUserByLastNameLike(lastName.trim());
+        List<UserVo> retUserList = new ArrayList<>(userList.size());
+        for(UserVo user:userList){
+            UserVo retVo = user.clone();
+            retVo.setSecretAns("");
+            retVo.setPassword("");
+            retUserList.add(retVo);
         }
-        else {
-            throw new BmsException("City Not Found");
-        }
+
+        return ResponseEntity.ok(retUserList);
     }
 }

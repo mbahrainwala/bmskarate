@@ -12,7 +12,7 @@ import javax.validation.Valid;
 @Getter
 @Setter
 @NoArgsConstructor
-public class CertificatesVo {
+public class CertificatesVo implements Cloneable{
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name="id")

@@ -59,7 +59,7 @@ const ListUsers = props => {
                 </TableHead>
                 <TableBody>
                     {apiRet!= undefined
-                        && apiRet!==null
+                        && apiRet!==null && apiRet.error === undefined
                         && Object.getOwnPropertyNames(apiRet).length !== 0?(
                         <>
                             {apiRet.map(user=>(
@@ -78,7 +78,12 @@ const ListUsers = props => {
                                     </TableCell>
                                     <TableCell scope="row">
                                         {user.id!=props.globalData.loginUser.id?(
-                                            <Button>Edit</Button>
+                                            <Button onClick={()=>{
+                                                const newProps = {...props.globalData};
+                                                newProps.appPage='editUser';
+                                                newProps.editUser=user;
+                                                props.setGlobalData(newProps);
+                                                }}>Edit</Button>
                                             ):(null)}
                                     </TableCell>
                                 </TableRow>

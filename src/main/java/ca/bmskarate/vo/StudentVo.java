@@ -15,7 +15,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class StudentVo {
+public class StudentVo implements Cloneable{
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="id")
@@ -51,4 +51,21 @@ public class StudentVo {
     @OneToMany
     @LazyCollection(LazyCollectionOption.FALSE)
     List<CertificatesVo> certificates;
+
+    public StudentVo clone() throws CloneNotSupportedException {
+        super.clone();
+        StudentVo vo = new StudentVo();
+        vo.setId(id);
+        vo.setNumber(number);
+        vo.setFirstName(firstName);
+        vo.setLastName(lastName);
+        vo.setBelt(belt);
+        vo.setStripes(stripes);
+        vo.setParent(parent);
+        vo.setVideo(video);
+        vo.setPhoto(photo);
+        vo.setCertificates(certificates);
+
+        return vo;
+    }
 }
