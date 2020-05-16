@@ -1,22 +1,11 @@
 import React from "react";
 import Button from '@material-ui/core/Button';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
+
 import PersonIcon from '@material-ui/icons/Person';
 
 import {restCall} from './utils/RestComponent'
 
 const UserManager = props => {
-    const [anchorEl, setAnchorEl] = React.useState(null);
-
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
-
     const logout = () => {
         restCall('POST', `${props.globalData.serverURI}/api/logout`, null, props.globalData.token);
         localStorage.clear();
