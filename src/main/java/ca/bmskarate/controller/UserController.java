@@ -7,6 +7,7 @@ import ca.bmskarate.service.UserService;
 import ca.bmskarate.util.APIErrors;
 import ca.bmskarate.util.SecurityUtils;
 import ca.bmskarate.vo.CityVo;
+import ca.bmskarate.vo.StudentVo;
 import ca.bmskarate.vo.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -136,6 +137,9 @@ public class UserController {
             UserVo retVo = user.clone();
             retVo.setSecretAns("");
             retVo.setPassword("");
+            for(StudentVo student:retVo.getStudents()){
+                student.setParent(null);
+            }
             retUserList.add(retVo);
         }
 

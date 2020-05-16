@@ -66,6 +66,7 @@ const ListStudents = props => {
                     <TableCell>Number</TableCell>
                     <TableCell>Belt</TableCell>
                     <TableCell>Stripes</TableCell>
+                    <TableCell>Parent Last Name</TableCell>
                     <TableCell>&nbsp;</TableCell>
                   </TableRow>
                 </TableHead>
@@ -92,6 +93,11 @@ const ListStudents = props => {
                                     </TableCell>
                                     <TableCell scope="row">
                                         {student.stripes}
+                                    </TableCell>
+                                    <TableCell scope="row">
+                                        {student.parent!==null && student.parent !== undefined?(
+                                            <>{student.parent.lastName}, {student.parent.firstName}</>
+                                        ):null}
                                     </TableCell>
                                     <TableCell scope="row">
                                         <Button onClick={()=>{

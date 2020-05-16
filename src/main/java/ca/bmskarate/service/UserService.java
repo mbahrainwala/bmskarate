@@ -134,6 +134,10 @@ public class UserService {
         if(studentOpt==null || !studentOpt.isPresent())
             throw new BmsException("Student does not exist");
 
+        StudentVo student = studentOpt.get();
+        student.setParent(user);
+        studentRepository.save(student);
+
         user.getStudents().add(studentOpt.get());
         saveUser(user);
     }

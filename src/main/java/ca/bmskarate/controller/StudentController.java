@@ -50,7 +50,13 @@ public class StudentController {
             throw new BmsException(APIErrors.NOACCESS);
         }
 
-        return ResponseEntity.ok(studentService.findByLastName(lastName));
+        List<StudentVo> studentList = studentService.findByLastName(lastName);
+        for(StudentVo student:studentList){
+            if(student.getParent()!=null)
+                student.getParent().setStudents(null); // remove cyclic parent list
+        }
+
+        return ResponseEntity.ok(studentList);
     }
 
     @RequestMapping(value="/getStudents", method = RequestMethod.GET)
