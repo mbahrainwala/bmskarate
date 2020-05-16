@@ -52,6 +52,13 @@ public class StudentService {
         boolean hasError = false;
         String error="";
 
+        if(vo.getNumber()==null || vo.getNumber().isEmpty()) {
+            if(hasError)
+                error += ", ";
+            hasError=true;
+            error += "Invalid Number";
+        }
+
         if(vo.getFirstName()==null || vo.getFirstName().isEmpty()) {
             if(hasError)
                 error += ", ";

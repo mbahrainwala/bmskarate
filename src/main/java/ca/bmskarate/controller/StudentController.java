@@ -36,7 +36,7 @@ public class StudentController {
 
         studentService.save(req.getStudentVo());
 
-        return ResponseEntity.ok("Success");
+        return ResponseEntity.ok("Update Successful");
     }
 
     @RequestMapping(value="/findStudents", method = RequestMethod.GET)

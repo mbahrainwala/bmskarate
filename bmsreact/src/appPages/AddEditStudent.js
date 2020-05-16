@@ -12,15 +12,22 @@ import {restCall} from '../utils/RestComponent'
 
 const AddEditStudent = props => {
     const [apiRet, setApiRet] = useState({});
-    const [editState, setEditState] = useState({});
+    const [editState, setEditState] = useState({
+        belt:'1',
+        stripes:'0'
+    });
 
     useEffect(() => {
-        if(Object.getOwnPropertyNames(editState).length === 0){
+
+        if(Object.getOwnPropertyNames(editState).length < 3 && props.globalData.studentId>0){
             restCall('GET', `${props.globalData.serverURI}/api/getStudents?id=${props.globalData.studentId}`, setApiRet, props.globalData.token, null);
+        }else if(Object.getOwnPropertyNames(editState).length === 0){
+            setEditState({belt:'1',stripes:'0'});
         }
 
-        if(apiRet!==null && apiRet.errors === undefined){
+        if(Object.getOwnPropertyNames(editState).length < 3 && apiRet!==null && apiRet.errors === undefined && apiRet.id!==undefined){
             setEditState(apiRet);
+            console.log(apiRet);
             setApiRet(null);
         }
     },[editState, apiRet, props.globalData.serverURI, props.globalData.studentId, props.globalData.token]);
@@ -44,10 +51,16 @@ const AddEditStudent = props => {
     }
 
     function changeStripes(event){
-            const newState = {...editState};
-            newState.stripes=event.target.value;
-            setEditState(newState);
+        const newState = {...editState};
+        newState.stripes=event.target.value;
+        setEditState(newState);
+    }
+
+    const saveStudent = () =>{
+        if(Object.getOwnPropertyNames(editState).length !== 0){
+            restCall('POST', `${props.globalData.serverURI}/api/saveStudent`, setApiRet, props.globalData.token, editState);
         }
+    };
 
     return(
         <div
@@ -61,29 +74,29 @@ const AddEditStudent = props => {
             <form style={{ width: "80%" }}>
                 <h1>{props.globalData.studentId===0?(<>Add Student</>):(<>Edit Student</>)}</h1>
                 {apiRet!==null && apiRet.error !== undefined?(<FormLabel component="legend">{apiRet.error}</FormLabel>):(<></>)}
+                {apiRet!==null && apiRet === 'Update Successful'?(<FormLabel component="legend">Update Successful</FormLabel>):(<></>)}
                 {Object.getOwnPropertyNames(editState).length !== 0 ?(<>
+                    <InputLabel htmlFor="number">Student Number</InputLabel>
                     <FormControl margin="normal" fullWidth>
-                        <InputLabel htmlFor="number">Student Number</InputLabel>
                         <Input id="number" type="text" value={editState.number} onChange={changeFunc}/>
                     </FormControl>
 
+                    <InputLabel htmlFor="firstName">First Name</InputLabel>
                     <FormControl margin="normal" fullWidth>
-                        <InputLabel htmlFor="firstName">First Name</InputLabel>
                         <Input id="firstName" type="text" value={editState.firstName} onChange={changeFunc}/>
                     </FormControl>
 
+                    <InputLabel htmlFor="lastName">Last Name</InputLabel>
                     <FormControl margin="normal" fullWidth>
-                        <InputLabel htmlFor="lastName">Last Name</InputLabel>
                         <Input id="lastName" type="text" value={editState.lastName} onChange={changeFunc}/>
                     </FormControl>
 
+                    <InputLabel htmlFor="belt">Belt</InputLabel>
                     <FormControl margin="normal" fullWidth>
-                        <InputLabel htmlFor="belt">Belt</InputLabel>
                         <Select
                           labelId="belt"
                           id="belt"
                           value={editState.belt}
-                          defaultValue='1'
                           onChange={changeBelt}
                         >
                             {props.globalData.commonData.belts.map(belt=>(
@@ -92,13 +105,12 @@ const AddEditStudent = props => {
                         </Select>
                     </FormControl>
 
+                    <InputLabel htmlFor="stripes">Stripes</InputLabel>
                     <FormControl margin="normal" fullWidth>
-                        <InputLabel htmlFor="stripes">Stripes</InputLabel>
                         <Select
                           labelId="stripes"
                           id="stripes"
                           value={editState.stripes}
-                          defaultValue='0'
                           onChange={changeStripes}
                         >
                             <MenuItem key='0' value='0'>0</MenuItem>
@@ -111,7 +123,7 @@ const AddEditStudent = props => {
                         </Select>
                     </FormControl>
 
-                    <Button variant="contained" color="primary" size="medium">
+                    <Button variant="contained" color="primary" size="medium" onClick={saveStudent}>
                         Send
                     </Button>
                 </>):null}

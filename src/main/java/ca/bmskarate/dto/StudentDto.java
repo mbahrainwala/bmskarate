@@ -19,9 +19,9 @@ public class StudentDto {
     public StudentVo getStudentVo(){
         StudentVo vo = new StudentVo();
         vo.setId(id);
-        vo.setNumber(number);
-        vo.setFirstName(firstName);
-        vo.setLastName(lastName);
+        vo.setNumber(number!=null?number.trim():null);
+        vo.setFirstName(firstName!=null?firstName.trim():null);
+        vo.setLastName(lastName!=null?lastName.trim():null);
         vo.setBelt(belt);
         vo.setStripes(stripes);
         return vo;
