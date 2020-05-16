@@ -11,5 +11,5 @@ import java.util.List;
 public interface UserRepository extends PagingAndSortingRepository<UserVo,Long> {
     List<UserVo> findByEmailIdIgnoreCase(String emailId);
     List<UserVo> findByEmailIdAndPasswordIgnoreCase(String emailId, String password);
-    List<UserVo> findByLastNameStartsWith(String lastName, Sort sort);
+    List<UserVo> findByLastNameStartsWithIgnoreCase(String lastName, Sort sort);
 }

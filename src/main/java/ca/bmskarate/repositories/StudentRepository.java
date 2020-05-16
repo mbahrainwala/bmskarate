@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface StudentRepository extends PagingAndSortingRepository<StudentVo, Long> {
     List<StudentVo> findByNumber(String number);
-    List<StudentVo> findByLastNameStartsWith(String lastName, Sort sort);
+    List<StudentVo> findByLastNameStartsWithIgnoreCase(String lastName, Sort sort);
 }

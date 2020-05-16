@@ -45,7 +45,7 @@ public class StudentService {
 
     @Transactional
     public List<StudentVo> findByLastName(String lastName){
-        return studentRepository.findByLastNameStartsWith(lastName, Sort.by("lastName").and(Sort.by("firstName")));
+        return studentRepository.findByLastNameStartsWithIgnoreCase(lastName, Sort.by("lastName").and(Sort.by("firstName")));
     }
 
     private String validateStudent(StudentVo vo){
