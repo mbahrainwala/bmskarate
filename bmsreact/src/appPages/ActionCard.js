@@ -36,7 +36,6 @@ const ActionCard = props => {
     const classes = useStyles();
 
     const openBelt = (beltid) =>{
-        console.log(beltid);
     };
 
     return (
