@@ -71,8 +71,12 @@ public class StudentController {
         }
 
         Optional<StudentVo> ret = studentService.findStudentById(id);
-        if(ret!=null && ret.isPresent())
-            return ResponseEntity.ok(ret.get());
+        if(ret!=null && ret.isPresent()) {
+            StudentVo student = ret.get();
+            if(student.getParent()!=null)
+                student.getParent().setStudents(null); // remove cyclic parent list
+            return ResponseEntity.ok(student);
+        }
 
         return ResponseEntity.ok(null);
     }

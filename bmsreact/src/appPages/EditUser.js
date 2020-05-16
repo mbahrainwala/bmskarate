@@ -256,12 +256,7 @@ const EditUser = props => {
                                 {student.stripes}
                             </TableCell>
                             <TableCell scope="row">
-                                <Button onClick={()=>{
-                                    const newProps = {...props.globalData};
-                                    newProps.appPage='addEditStudent';
-                                    newProps.studentId=student.id;
-                                    props.setGlobalData(newProps);
-                                    }}>Edit</Button>
+                                <Button color="primary" variant="contained" size="small" onClick={()=>{}}>Remove</Button>
                             </TableCell>
                         </TableRow>
                     ))}
@@ -336,7 +331,7 @@ const EditUser = props => {
                                         {student.stripes}
                                     </TableCell>
                                     <TableCell scope="row">
-                                        <Button color="primary" onClick={()=>{addStudent(props.globalData.editUser.id, student.id)}}>Add</Button>
+                                        <Button color="primary" variant="contained" size="small" onClick={()=>{addStudent(props.globalData.editUser.id, student.id)}}>Add</Button>
                                     </TableCell>
                                 </TableRow>
                             ))}

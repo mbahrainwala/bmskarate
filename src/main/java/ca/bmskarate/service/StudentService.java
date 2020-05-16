@@ -28,6 +28,10 @@ public class StudentService {
         if(student!=null && student.getId()!=vo.getId())
             throw new BmsException("Student Number Exists.");
 
+        if(student!=null && student.getId()==vo.getId()){
+            vo.setParent(student.getParent());
+        }
+
         studentRepository.save(vo);
     }
 
