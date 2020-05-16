@@ -61,7 +61,7 @@ const ActionCard = props => {
                             <Button color="primary" key='addStudent' onClick={()=>{
                                     const newProps = {...props.globalData};
                                         newProps.appPage='addEditStudent';
-                                        newProps.setStudentId=0;
+                                        newProps.studentId=0;
                                         props.setGlobalData(newProps);
                                 }}>
                                 Add Student</Button>

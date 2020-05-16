@@ -29,39 +29,21 @@ const UserManager = props => {
         <>
         {props.globalData.loginUser!=null?(
             <div style={{halign:"right"}}>
-             <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick} style={{color:'white'}}>
+             <Button onClick={
+                    ()=>{
+                        const newProps = {...props.globalData};
+                        newProps.appPage='editUser';
+                        newProps.editUser=props.globalData.loginUser;
+                        props.setGlobalData(newProps);
+                    }
+                } style={{color:'white'}}>
                 <PersonIcon/>
                 &nbsp;&nbsp;{props.globalData.loginUser.firstName}
                 &nbsp;&nbsp;{props.globalData.loginUser.lastName}
              </Button>
-             <Menu
-                     id="simple-menu"
-                     anchorEl={anchorEl}
-                     open={Boolean(anchorEl)}
-                     onClose={handleClose}
-                     anchorReference={anchorEl}
-                     anchorOrigin = {{
-                        vertical: 'bottom',
-                                  horizontal: 'left'
-                     }}
-                     transformOrigin={{
-                               vertical: 'top',
-                               horizontal: 'left',
-                             }}
-                   >
-                   {props.globalData.appPage!=='editUser'?(
-                    <MenuItem onClick={()=>{
-                        const newProps = {...props.globalData};
-                                newProps.appPage='editUser';
-                                newProps.editUser=props.globalData.loginUser;
-                                props.setGlobalData(newProps);
-                                handleClose();
-                        }}>Profile</MenuItem>
-                        ):(null)}
-                     <MenuItem onClick={logout}>Logout</MenuItem>
-                   </Menu>
+             <Button style={{color:'white'}} onClick={logout}>Logout</Button>
             </div>
-         ):(<></>)}
+         ):null}
          </>
     );
 }

@@ -96,8 +96,8 @@ const ListStudents = props => {
                                     <TableCell scope="row">
                                         <Button onClick={()=>{
                                             const newProps = {...props.globalData};
-                                            newProps.appPage='editStudent';
-                                            newProps.setStudentId=student.id;
+                                            newProps.appPage='addEditStudent';
+                                            newProps.studentId=student.id;
                                             props.setGlobalData(newProps);
                                             }}>Edit</Button>
                                     </TableCell>
