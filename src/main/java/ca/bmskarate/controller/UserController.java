@@ -114,7 +114,7 @@ public class UserController {
 
             return ResponseEntity.ok("Update Successful");
         }else
-            return ResponseEntity.ok("Invalid userId");
+            throw new BmsException("Invalid userId");
     }
 
     @RequestMapping(value = "/api/findUser", method = RequestMethod.GET)
@@ -140,5 +140,20 @@ public class UserController {
         }
 
         return ResponseEntity.ok(retUserList);
+    }
+
+    @RequestMapping(value = "/api/addStudentToUser", method = RequestMethod.PATCH)
+    public ResponseEntity<String> addStudentToUSer(Principal auth, @RequestParam @NotNull long userId, @RequestParam @NotNull long studentId) throws BmsException {
+        if(auth==null)
+            throw new BmsException(APIErrors.UNAUTHORISED);
+
+        UserVo principal = (UserVo) ((UsernamePasswordAuthenticationToken)auth).getPrincipal();
+
+        if(UserService.AllowedUserTypes.U.toString().equals(principal.getType()))
+            throw new BmsException(APIErrors.NOACCESS);
+
+        userService.addStudentToUser(userId, studentId);
+
+        return ResponseEntity.ok(APIErrors.SUCCESS);
     }
 }

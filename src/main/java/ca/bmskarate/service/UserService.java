@@ -1,9 +1,11 @@
 package ca.bmskarate.service;
 
 import ca.bmskarate.exception.BmsException;
+import ca.bmskarate.repositories.StudentRepository;
 import ca.bmskarate.repositories.UserRepository;
 import ca.bmskarate.util.SecurityUtils;
 import ca.bmskarate.util.YesNo;
+import ca.bmskarate.vo.StudentVo;
 import ca.bmskarate.vo.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -18,6 +20,9 @@ import java.util.Optional;
 public class UserService {
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    StudentRepository studentRepository;
 
     public enum AllowedUserTypes{U ("User"), A("Admin"), S("Super User");
         private final String desc;
@@ -111,6 +116,48 @@ public class UserService {
         userVo.setPasswordAsEncrypt("abc123");
 
         saveUser(userVo);
+    }
+
+    @Transactional
+    public void addStudentToUser(long userId, long studentId) throws BmsException {
+        Optional<UserVo> userOpt = getUserById(userId);
+        if(userOpt==null || !userOpt.isPresent())
+            throw new BmsException("User does not exist");
+
+        UserVo user= userOpt.get();
+        for(StudentVo student:user.getStudents()){
+            if(student.getId() == studentId)
+                throw new BmsException("Student already exists for user");
+        }
+
+        Optional<StudentVo> studentOpt = studentRepository.findById(studentId);
+        if(studentOpt==null || !studentOpt.isPresent())
+            throw new BmsException("Student does not exist");
+
+        user.getStudents().add(studentOpt.get());
+        saveUser(user);
+    }
+
+    @Transactional
+    public void removeStudentFromUser(long userId, long studentId) throws BmsException {
+        Optional<UserVo> userOpt = getUserById(userId);
+        if(userOpt==null || !userOpt.isPresent())
+            throw new BmsException("User does not exist");
+
+        UserVo user= userOpt.get();
+        boolean userExists = false;
+        for(StudentVo student:user.getStudents()){
+            if(student.getId() == studentId) {
+                userExists = true;
+                user.getStudents().remove(student);
+                break;
+            }
+        }
+
+        if(!userExists)
+            throw new BmsException("Student does not exist");
+
+        saveUser(user);
     }
 
     private String validateUser(UserVo vo){

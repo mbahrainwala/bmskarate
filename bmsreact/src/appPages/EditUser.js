@@ -6,7 +6,14 @@ import {
   Input,
   Button,
   MenuItem,
-  Select
+  Select,
+  TableContainer,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  Paper
 } from "@material-ui/core";
 
 import {restCall} from '../utils/RestComponent'
@@ -77,7 +84,21 @@ const EditUser = props => {
         restCall('POST', `${props.globalData.serverURI}/api/updateUser`, setApiRet, props.globalData.token, editState);
     };
 
+    const [apiRetFind, setApiRetFind] = useState({});
+
+    const handleFindChange=(event)=>{
+        if(event.target.id==='lastName'){
+            restCall('GET', `${props.globalData.serverURI}/api/findStudents?lastName=${event.target.value}`, setApiRetFind, props.globalData.token, null);
+        }
+    }
+
+    const [apiRetAdd, setApiRetAdd] = useState({});
+    const addStudent=(userId, studentId)=>{
+        restCall('PATCH', `${props.globalData.serverURI}/api/addStudentToUser?userId=${userId}&studentId=${studentId}`, setApiRetAdd, props.globalData.token, null);
+    }
+
     return(
+        <>
         <div
             style={{
             display: "flex",
@@ -180,6 +201,152 @@ const EditUser = props => {
                 </Button></>)}
             </form>
         </div>
+
+        <div
+            style={{
+            display: "flex",
+            justifyContent: "center",
+            margin: 20,
+            padding: 20
+            }}
+        >
+           <div style={{width:"80%"}}>
+                <h1>Existing Students</h1>
+            </div>
+        </div>
+
+        <div
+            style={{
+            display: "flex",
+            justifyContent: "center",
+            margin: 20,
+            padding: 20
+            }}
+        >
+            <TableContainer component={Paper} style={{width:"80%"}}>
+                <Table aria-label="simple table">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>First Name</TableCell>
+                            <TableCell>Last Name</TableCell>
+                            <TableCell>Number</TableCell>
+                            <TableCell>Belt</TableCell>
+                            <TableCell>Stripes</TableCell>
+                            <TableCell>&nbsp;</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                    {props.globalData.editUser.students.map(student=>(
+                        <TableRow key={student.id}>
+                            <TableCell component="th" scope="row">
+                                {student.firstName}
+                            </TableCell>
+                            <TableCell scope="row">
+                                {student.lastName}
+                            </TableCell>
+                            <TableCell scope="row">
+                                {student.number}
+                            </TableCell>
+                            <TableCell scope="row">
+                                {props.globalData.commonData.belts.map(belt=>(
+                                    <>{belt.beltId===student.belt?(<>{belt.beltColor}</>):null}</>
+                                ))}
+                            </TableCell>
+                            <TableCell scope="row">
+                                {student.stripes}
+                            </TableCell>
+                            <TableCell scope="row">
+                                <Button onClick={()=>{
+                                    const newProps = {...props.globalData};
+                                    newProps.appPage='addEditStudent';
+                                    newProps.studentId=student.id;
+                                    props.setGlobalData(newProps);
+                                    }}>Edit</Button>
+                            </TableCell>
+                        </TableRow>
+                    ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        </div>
+
+        <div
+            style={{
+            display: "flex",
+            justifyContent: "center",
+            margin: 20,
+            padding: 20
+            }}
+        >
+           <div style={{width:"80%"}}>
+                <form onChange={handleFindChange.bind(this)}>
+                    <h1>Find Students</h1>
+                    {apiRetFind.error !== undefined?(<FormLabel component="legend">{apiRetFind.error}</FormLabel>):null}
+                    {apiRetAdd.error !== undefined?(<FormLabel component="legend">{apiRetAdd.error}</FormLabel>):null}
+                    <FormControl margin="normal" fullWidth>
+                        <InputLabel htmlFor="lastName">Last Name</InputLabel>
+                        <Input id="lastName" type="text"/>
+                    </FormControl>
+                </form>
+            </div>
+        </div>
+
+        <div
+            style={{
+            display: "flex",
+            justifyContent: "center",
+            margin: 20,
+            padding: 20
+            }}
+        >
+            <TableContainer component={Paper} style={{width:"80%"}}>
+                <Table aria-label="simple table">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>First Name</TableCell>
+                            <TableCell>Last Name</TableCell>
+                            <TableCell>Number</TableCell>
+                            <TableCell>Belt</TableCell>
+                            <TableCell>Stripes</TableCell>
+                            <TableCell>&nbsp;</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                    {apiRet!== undefined
+                        && apiRetFind!==null && apiRetFind.error === undefined
+                        && Object.getOwnPropertyNames(apiRetFind).length !== 0?(
+                        <>
+                            {apiRetFind.map(student=>(
+                                <TableRow key={student.id}>
+                                    <TableCell component="th" scope="row">
+                                        {student.firstName}
+                                    </TableCell>
+                                    <TableCell scope="row">
+                                        {student.lastName}
+                                    </TableCell>
+                                    <TableCell scope="row">
+                                        {student.number}
+                                    </TableCell>
+                                    <TableCell scope="row">
+                                        {props.globalData.commonData.belts.map(belt=>(
+                                            <>{belt.beltId===student.belt?(<>{belt.beltColor}</>):null}</>
+                                        ))}
+                                    </TableCell>
+                                    <TableCell scope="row">
+                                        {student.stripes}
+                                    </TableCell>
+                                    <TableCell scope="row">
+                                        <Button color="primary" onClick={()=>{addStudent(props.globalData.editUser.id, student.id)}}>Add</Button>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </>
+                    ):(null)}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        </div>
+        </>
     );
 }
 
