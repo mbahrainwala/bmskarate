@@ -88,14 +88,23 @@ const EditUser = props => {
 
     const handleFindChange=(event)=>{
         if(event.target.id==='lastName'){
-            restCall('GET', `${props.globalData.serverURI}/api/findStudents?lastName=${event.target.value}`, setApiRetFind, props.globalData.token, null);
+            restCall('GET', `${props.globalData.serverURI}/api/findStudents?lastName=${event.target.value}&showLinked=N`, setApiRetFind, props.globalData.token, null);
         }
     }
 
     const [apiRetAdd, setApiRetAdd] = useState({});
+    const [apiUserRet, setApiUserRet] = useState({});
+
     const addStudent=(userId, studentId)=>{
         restCall('PATCH', `${props.globalData.serverURI}/api/addStudentToUser?userId=${userId}&studentId=${studentId}`, setApiRetAdd, props.globalData.token, null);
+        restCall('GET', `${props.globalData.serverURI}/api/getUser?id=${userId}`, setApiUserRet, props.globalData.token, null);
     }
+
+    useEffect(()=>{
+        if(apiUserRet!==undefined && apiUserRet.error === undefined){
+            editState=apiUserRet;
+        }
+    },[apiUserRet]);
 
     return(
         <>

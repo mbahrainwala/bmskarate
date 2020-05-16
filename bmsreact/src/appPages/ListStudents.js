@@ -23,7 +23,7 @@ const ListStudents = props => {
 
     const handleChange=(event)=>{
         if(event.target.id==='lastName'){
-            restCall('GET', `${props.serverURI}/api/findStudents?lastName=${event.target.value}`, setApiRet, props.token, null);
+            restCall('GET', `${props.serverURI}/api/findStudents?lastName=${event.target.value}&showLinked=Y`, setApiRet, props.token, null);
         }
     }
 

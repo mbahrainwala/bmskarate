@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,7 +41,7 @@ public class StudentController {
     }
 
     @RequestMapping(value="/findStudents", method = RequestMethod.GET)
-    public ResponseEntity<List<StudentVo>> findStudentsByLastName(Principal auth,@RequestParam @NotNull String lastName) throws BmsException{
+    public ResponseEntity<List<StudentVo>> findStudentsByLastName(Principal auth,@RequestParam @NotNull String lastName, @RequestParam String showLinked) throws BmsException{
         if(auth==null)
             throw new BmsException(APIErrors.UNAUTHORISED);
 
@@ -51,9 +52,20 @@ public class StudentController {
         }
 
         List<StudentVo> studentList = studentService.findByLastName(lastName);
-        for(StudentVo student:studentList){
-            if(student.getParent()!=null)
-                student.getParent().setStudents(null); // remove cyclic parent list
+        List<StudentVo> retList = new ArrayList<>(studentList.size());
+
+        if("N".equals(showLinked)){
+            for (StudentVo student : studentList) {
+                if (student.getParent() == null){
+                    retList.add(student);
+                }
+            }
+            studentList = retList;
+        }else {
+            for (StudentVo student : studentList) {
+                if (student.getParent() != null)
+                    student.getParent().setStudents(null); // remove cyclic parent list
+            }
         }
 
         return ResponseEntity.ok(studentList);

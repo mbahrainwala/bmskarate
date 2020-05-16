@@ -118,6 +118,30 @@ public class UserController {
             throw new BmsException("Invalid userId");
     }
 
+    @RequestMapping(value = "/api/getUser", method = RequestMethod.GET)
+    public ResponseEntity<UserVo> getUser(Principal auth, @RequestParam @NotNull long id) throws BmsException {
+        if(auth==null)
+            throw new BmsException(APIErrors.UNAUTHORISED);
+
+        UserVo principal = (UserVo) ((UsernamePasswordAuthenticationToken)auth).getPrincipal();
+
+        if(UserService.AllowedUserTypes.U.toString().equals(principal.getType()))
+            throw new BmsException(APIErrors.NOACCESS);
+
+        Optional<UserVo> userOpt =  userService.getUserById(id);
+        if(userOpt!=null && userOpt.isPresent()){
+            UserVo user = userOpt.get();
+
+            for(StudentVo student:user.getStudents()){
+                student.setParent(null);
+            }
+
+            return ResponseEntity.ok(user);
+        }
+
+        return ResponseEntity.ok(null);
+    }
+
     @RequestMapping(value = "/api/findUser", method = RequestMethod.GET)
     public ResponseEntity<List<UserVo>> findUser(Principal auth, @RequestParam @NotNull String lastName) throws BmsException, CloneNotSupportedException {
         if(auth==null)
