@@ -171,7 +171,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/api/addStudentToUser", method = RequestMethod.PATCH)
-    public ResponseEntity<String> addStudentToUSer(Principal auth, @RequestParam @NotNull long userId, @RequestParam @NotNull long studentId) throws BmsException {
+    public ResponseEntity<String> addStudentToUser(Principal auth, @RequestParam @NotNull long userId, @RequestParam @NotNull long studentId) throws BmsException {
         if(auth==null)
             throw new BmsException(APIErrors.UNAUTHORISED);
 
@@ -181,6 +181,21 @@ public class UserController {
             throw new BmsException(APIErrors.NOACCESS);
 
         userService.addStudentToUser(userId, studentId);
+
+        return ResponseEntity.ok(APIErrors.SUCCESS);
+    }
+
+    @RequestMapping(value = "/api/removeStudentFromUser", method = RequestMethod.PATCH)
+    public ResponseEntity<String> removeStudentFromUser(Principal auth, @RequestParam @NotNull long userId, @RequestParam @NotNull long studentId) throws BmsException {
+        if(auth==null)
+            throw new BmsException(APIErrors.UNAUTHORISED);
+
+        UserVo principal = (UserVo) ((UsernamePasswordAuthenticationToken)auth).getPrincipal();
+
+        if(UserService.AllowedUserTypes.U.toString().equals(principal.getType()))
+            throw new BmsException(APIErrors.NOACCESS);
+
+        userService.removeStudentFromUser(userId, studentId);
 
         return ResponseEntity.ok(APIErrors.SUCCESS);
     }

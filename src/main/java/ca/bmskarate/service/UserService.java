@@ -158,6 +158,15 @@ public class UserService {
             }
         }
 
+        if(userExists) {
+            Optional<StudentVo> studentOpt = studentRepository.findById(studentId);
+            if(studentOpt!=null && studentOpt.isPresent()) {
+                StudentVo student = studentOpt.get();
+                student.setParent(null);
+                studentRepository.save(student);
+            }
+        }
+
         if(!userExists)
             throw new BmsException("Student does not exist");
 

@@ -100,6 +100,11 @@ const EditUser = props => {
         restCall('GET', `${props.globalData.serverURI}/api/getUser?id=${userId}`, setApiUserRet, props.globalData.token, null);
     }
 
+    const [apiRetRemove, setApiRetRemove] = useState({});
+    const removeStudent=(userId, studentId)=>{
+        restCall('PATCH', `${props.globalData.serverURI}/api/removeStudentFromUser?userId=${userId}&studentId=${studentId}`, setApiRetRemove, props.globalData.token, null);
+    }
+
     useEffect(()=>{
         if(apiUserRet!==undefined && apiUserRet.error === undefined){
             editState=apiUserRet;
@@ -221,6 +226,7 @@ const EditUser = props => {
         >
            <div style={{width:"80%"}}>
                 <h1>Existing Students</h1>
+                {apiRetRemove.error !== undefined?(<FormLabel component="legend">{apiRetRemove.error}</FormLabel>):null}
             </div>
         </div>
 
@@ -265,7 +271,9 @@ const EditUser = props => {
                                 {student.stripes}
                             </TableCell>
                             <TableCell scope="row">
-                                <Button color="primary" variant="contained" size="small" onClick={()=>{}}>Remove</Button>
+                                <Button color="primary" variant="contained" size="small" onClick={()=>{
+                                        removeStudent(props.globalData.editUser.id, student.id)
+                                    }}>Remove</Button>
                             </TableCell>
                         </TableRow>
                     ))}
