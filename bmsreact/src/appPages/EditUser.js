@@ -7,13 +7,6 @@ import {
   Button,
   MenuItem,
   Select,
-  TableContainer,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
-  Paper
 } from "@material-ui/core";
 
 import ListStudents from './ListStudents'
@@ -21,9 +14,7 @@ import {restCall} from '../utils/RestComponent'
 
 const EditUser = props => {
     const [apiRet, setApiRet] = useState({});
-    const [editState, setEditState] = useState({
-
-    });
+    const [editState, setEditState] = useState({});
 
     useEffect(() => {
         if(Object.getOwnPropertyNames(editState).length===0){
@@ -34,7 +25,7 @@ const EditUser = props => {
                 setEditState(newState);
             }
         }
-    },[editState, apiRet])
+    },[editState, apiRet, props.globalData.editUser.id, props.globalData.serverURI, props.globalData.token])
 
     function changeFunc(event){
         const newState = {...editState};
