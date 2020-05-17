@@ -19,7 +19,8 @@ import {restCall} from '../utils/RestComponent'
 
 
 const ListStudents = props => {
-    const [apiRet, setApiRet] = useState({});
+    const [apiRet, setApiRet] = useState(
+        props.listFor==='remove'?props.globalData.editUser.students:{});
 
     const handleChange=(event)=>{
         if(event.target.id==='lastName'){
@@ -32,6 +33,10 @@ const ListStudents = props => {
     const addStudent=(userId, studentId)=>{
         restCall('PATCH', `${props.globalData.serverURI}/api/addStudentToUser?userId=${userId}&studentId=${studentId}`, setApiRetAdd, props.globalData.token, null);
     }
+
+    const removeStudent=(userId, studentId)=>{
+            restCall('PATCH', `${props.globalData.serverURI}/api/removeStudentFromUser?userId=${userId}&studentId=${studentId}`, setApiRetAdd, props.globalData.token, null);
+        }
 
     return(
         <>
@@ -47,12 +52,15 @@ const ListStudents = props => {
                     <form onChange={handleChange.bind(this)}>
                         {props.listFor==='find'?(<h1>List Students</h1>):null}
                         {props.listFor==='add'?(<h1>Add Students</h1>):null}
+                        {props.listFor==='remove'?(<h1>Students</h1>):null}
                         {apiRet.error !== undefined?(<FormLabel component="legend">{apiRet.error}</FormLabel>):(<></>)}
                         {apiRetAdd.error !== undefined?(<FormLabel component="legend">{apiRetAdd.error}</FormLabel>):null}
+
+                        {props.listFor!=='remove'?(
                         <FormControl margin="normal" fullWidth>
                             <InputLabel htmlFor="lastName">Last Name</InputLabel>
                             <Input id="lastName" type="text"/>
-                        </FormControl>
+                        </FormControl>):null}
                     </form>
                 </div>
             </div>
@@ -121,6 +129,11 @@ const ListStudents = props => {
                                                 onClick={()=>{addStudent(props.globalData.editUser.id, student.id)}}>
                                                 Add</Button>
                                             ):null}
+                                         {props.listFor==='remove'?(
+                                              <Button color="primary" variant="contained" size="small"
+                                                 onClick={()=>{removeStudent(props.globalData.editUser.id, student.id)}}>
+                                                 Remove</Button>
+                                             ):null}
                                     </TableCell>
                                 </TableRow>
                             ))}
