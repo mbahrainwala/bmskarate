@@ -166,11 +166,12 @@ const EditUser = props => {
         <ListStudents globalData={props.globalData}
             setGlobalData={props.setGlobalData}
             token={props.globalData.token}
-            serverURI={props.globalData.serverURI} listFor='remove'/>
-        <ListStudents globalData={props.globalData}
-            setGlobalData={props.setGlobalData}
-            token={props.globalData.token}
-            serverURI={props.globalData.serverURI} listFor='add'/>
+            serverURI={props.globalData.serverURI} listFor='list'/>
+        {editState.id!==props.globalData.loginUser.id?(
+            <ListStudents globalData={props.globalData}
+                setGlobalData={props.setGlobalData}
+                token={props.globalData.token}
+                serverURI={props.globalData.serverURI} listFor='add'/>):null}
         </>
     );
 }

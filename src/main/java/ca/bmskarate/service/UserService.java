@@ -176,7 +176,7 @@ public class UserService {
     private String validateUser(UserVo vo){
         boolean hasError = false;
         String error="";
-        if(vo.getEmailId() == null || vo.getEmailId().isEmpty() || !vo.getEmailId().matches("^\\w+@[a-zA-Z_]+?\\.[a-zA-Z]{2,3}$")) {
+        if(vo.getEmailId() == null || vo.getEmailId().isEmpty() || !vo.getEmailId().contains("@") || !vo.getEmailId().contains(".")) {
             error += "Invalid EmailId";
             hasError=true;
         }

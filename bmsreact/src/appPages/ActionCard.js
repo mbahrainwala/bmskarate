@@ -4,6 +4,7 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import ListStudents from './ListStudents'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -72,12 +73,20 @@ const ActionCard = props => {
                                 Show Students</Button>
                         </div>
                     ):null}
+                    <ListStudents globalData={props.globalData}
+                                                        setGlobalData={props.setGlobalData}
+                                                        token={props.globalData.token}
+                                                        serverURI={props.globalData.serverURI} listFor='list'/>
                 </>):null}
                 {props.type==='v'?(
                     <div className={classes.paper}>
                         {props.globalData.commonData.belts.map(belt=>(
-                            <Button key={belt.beltId} beltid={belt.beltId} onClick={()=>{openBelt(belt.beltId)}}>
-                                {belt.beltColor}</Button>
+                                <>
+                                {belt.beltId<=props.globalData.loginUser.maxBelt?(
+                                    <Button key={belt.beltId} beltid={belt.beltId} onClick={()=>{openBelt(belt.beltId)}}>
+                                                                        {belt.beltColor}</Button>
+                                    ):null}
+                                </>
                             )
                         )}
                     </div>

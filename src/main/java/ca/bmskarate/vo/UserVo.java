@@ -1,5 +1,6 @@
 package ca.bmskarate.vo;
 
+import ca.bmskarate.service.UserService;
 import ca.bmskarate.util.SecurityUtils;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -87,6 +88,24 @@ public class UserVo implements Cloneable{
 
     public void setSecAnsAsEncrypt(String secAns){
         this.setSecretAns(SecurityUtils.getMD5Hash(secAns));
+    }
+
+    public int getMaxBelt(){
+        if(!UserService.AllowedUserTypes.U.toString().equals(this.type)){
+            return 100;
+        }else
+        {
+            if(this.getStudents()==null || this.getStudents().size()<1)
+                return 0;
+            else{
+                int maxBelt=1;
+                for(StudentVo student:this.getStudents()){
+                    if(student.getBelt()>maxBelt)
+                        maxBelt = student.getBelt();
+                }
+                return maxBelt;
+            }
+        }
     }
 
     public UserVo clone() throws CloneNotSupportedException {

@@ -20,7 +20,8 @@ import {restCall} from '../utils/RestComponent'
 
 const ListStudents = props => {
     const [apiRet, setApiRet] = useState(
-        props.listFor==='remove'?props.globalData.editUser.students:{});
+        props.listFor==='remove'?props.globalData.editUser.students:(props.listFor==='list'?props.globalData.loginUser.students:{})
+    );
 
     const handleChange=(event)=>{
         if(event.target.id==='lastName'){
@@ -35,8 +36,8 @@ const ListStudents = props => {
     }
 
     const removeStudent=(userId, studentId)=>{
-            restCall('PATCH', `${props.globalData.serverURI}/api/removeStudentFromUser?userId=${userId}&studentId=${studentId}`, setApiRetAdd, props.globalData.token, null);
-        }
+        restCall('PATCH', `${props.globalData.serverURI}/api/removeStudentFromUser?userId=${userId}&studentId=${studentId}`, setApiRetAdd, props.globalData.token, null);
+    }
 
     return(
         <>
@@ -56,7 +57,7 @@ const ListStudents = props => {
                         {apiRet.error !== undefined?(<FormLabel component="legend">{apiRet.error}</FormLabel>):(<></>)}
                         {apiRetAdd.error !== undefined?(<FormLabel component="legend">{apiRetAdd.error}</FormLabel>):null}
 
-                        {props.listFor!=='remove'?(
+                        {props.listFor!=='remove' && props.listFor!=='list'?(
                         <FormControl margin="normal" fullWidth>
                             <InputLabel htmlFor="lastName">Last Name</InputLabel>
                             <Input id="lastName" type="text"/>

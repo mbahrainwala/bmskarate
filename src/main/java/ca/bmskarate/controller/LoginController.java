@@ -6,6 +6,7 @@ import ca.bmskarate.exception.BmsException;
 import ca.bmskarate.security.SessionTokenManager;
 import ca.bmskarate.service.UserService;
 import ca.bmskarate.util.APIErrors;
+import ca.bmskarate.vo.StudentVo;
 import ca.bmskarate.vo.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +30,7 @@ public class LoginController {
     UserService userService;
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginReq, HttpServletRequest httpServletRequest) throws BmsException {
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginReq, HttpServletRequest httpServletRequest) throws BmsException, CloneNotSupportedException {
         LoginResponse resp = new LoginResponse();
 
         UserVo userVo = userService.getUserByEmailPassword(loginReq.getEmailId(), loginReq.getPassword());
@@ -43,11 +44,17 @@ public class LoginController {
             SecurityContext sc = SecurityContextHolder.getContext();
             sc.setAuthentication(authentication);
 
+            UserVo retUser = userVo.clone();
             //clear sensitive data
-            userVo.setPassword("");
-            userVo.setSecretAns("");
+            retUser.setPassword("");
+            retUser.setSecretAns("");
 
-            resp.setUser(userVo);
+            //go through students to remove cyclic refrence
+            for(StudentVo student:retUser.getStudents()){
+                student.setParent(null);
+            }
+
+            resp.setUser(retUser);
             resp.setToken(SessionTokenManager.setToken(authentication, httpServletRequest.getRemoteAddr()));
             return ResponseEntity.ok(resp);
         }

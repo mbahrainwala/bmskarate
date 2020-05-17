@@ -119,18 +119,19 @@ public class UserController {
     }
 
     @RequestMapping(value = "/api/getUser", method = RequestMethod.GET)
-    public ResponseEntity<UserVo> getUser(Principal auth, @RequestParam @NotNull long id) throws BmsException {
+    public ResponseEntity<UserVo> getUser(Principal auth, @RequestParam @NotNull long id) throws BmsException, CloneNotSupportedException {
         if(auth==null)
             throw new BmsException(APIErrors.UNAUTHORISED);
 
         UserVo principal = (UserVo) ((UsernamePasswordAuthenticationToken)auth).getPrincipal();
 
-        if(UserService.AllowedUserTypes.U.toString().equals(principal.getType()))
+        if(UserService.AllowedUserTypes.U.toString().equals(principal.getType()) && principal.getId() != id)
             throw new BmsException(APIErrors.NOACCESS);
 
         Optional<UserVo> userOpt =  userService.getUserById(id);
         if(userOpt!=null && userOpt.isPresent()){
-            UserVo user = userOpt.get();
+            UserVo userOrig = userOpt.get();
+            UserVo user = userOrig.clone();
 
             for(StudentVo student:user.getStudents()){
                 student.setParent(null);
