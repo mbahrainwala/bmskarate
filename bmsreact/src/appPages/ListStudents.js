@@ -23,8 +23,14 @@ const ListStudents = props => {
 
     const handleChange=(event)=>{
         if(event.target.id==='lastName'){
-            restCall('GET', `${props.serverURI}/api/findStudents?lastName=${event.target.value}&showLinked=Y`, setApiRet, props.token, null);
+            const showLinked = props.listFor==='add'?'N':'Y';
+            restCall('GET', `${props.serverURI}/api/findStudents?lastName=${event.target.value}&showLinked=${showLinked}`, setApiRet, props.token, null);
         }
+    }
+
+    const [apiRetAdd, setApiRetAdd] = useState({});
+    const addStudent=(userId, studentId)=>{
+        restCall('PATCH', `${props.globalData.serverURI}/api/addStudentToUser?userId=${userId}&studentId=${studentId}`, setApiRetAdd, props.globalData.token, null);
     }
 
     return(
@@ -39,8 +45,10 @@ const ListStudents = props => {
             >
                <div style={{width:"80%"}}>
                     <form onChange={handleChange.bind(this)}>
-                        <h1>List Students</h1>
+                        {props.listFor==='find'?(<h1>List Students</h1>):null}
+                        {props.listFor==='add'?(<h1>Add Students</h1>):null}
                         {apiRet.error !== undefined?(<FormLabel component="legend">{apiRet.error}</FormLabel>):(<></>)}
+                        {apiRetAdd.error !== undefined?(<FormLabel component="legend">{apiRetAdd.error}</FormLabel>):null}
                         <FormControl margin="normal" fullWidth>
                             <InputLabel htmlFor="lastName">Last Name</InputLabel>
                             <Input id="lastName" type="text"/>
@@ -66,7 +74,7 @@ const ListStudents = props => {
                     <TableCell>Number</TableCell>
                     <TableCell>Belt</TableCell>
                     <TableCell>Stripes</TableCell>
-                    <TableCell>Parent Last Name</TableCell>
+                    {props.listFor==='find'?(<TableCell>Parent Last Name</TableCell>):null}
                     <TableCell>&nbsp;</TableCell>
                   </TableRow>
                 </TableHead>
@@ -94,18 +102,25 @@ const ListStudents = props => {
                                     <TableCell scope="row">
                                         {student.stripes}
                                     </TableCell>
+                                    {props.listFor==='find'?(
                                     <TableCell scope="row">
                                         {student.parent!==null && student.parent !== undefined?(
                                             <>{student.parent.lastName}, {student.parent.firstName}</>
                                         ):null}
-                                    </TableCell>
+                                    </TableCell>):null}
                                     <TableCell scope="row">
+                                        {props.listFor==='find'?(
                                         <Button onClick={()=>{
                                             const newProps = {...props.globalData};
                                             newProps.appPage='addEditStudent';
                                             newProps.studentId=student.id;
                                             props.setGlobalData(newProps);
-                                            }}>Edit</Button>
+                                            }}>Edit</Button>):null}
+                                         {props.listFor==='add'?(
+                                             <Button color="primary" variant="contained" size="small"
+                                                onClick={()=>{addStudent(props.globalData.editUser.id, student.id)}}>
+                                                Add</Button>
+                                            ):null}
                                     </TableCell>
                                 </TableRow>
                             ))}

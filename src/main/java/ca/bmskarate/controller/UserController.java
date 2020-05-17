@@ -135,7 +135,8 @@ public class UserController {
             for(StudentVo student:user.getStudents()){
                 student.setParent(null);
             }
-
+            user.setPassword(null);
+            user.setSecretAns(null);
             return ResponseEntity.ok(user);
         }
 
