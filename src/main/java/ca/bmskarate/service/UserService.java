@@ -101,6 +101,9 @@ public class UserService {
 
             UserVo user = existingOptUser.get();
             vo.setEmailId(user.getEmailId()); //email address cannot be changed
+
+            if(vo.getStudents()==null)
+                vo.setStudents(user.getStudents());//students cannot be modified here.
         }
         this.userRepository.save(vo);
     }
