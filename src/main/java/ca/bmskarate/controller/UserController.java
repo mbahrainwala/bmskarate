@@ -11,6 +11,7 @@ import ca.bmskarate.vo.CityVo;
 import ca.bmskarate.vo.StudentVo;
 import ca.bmskarate.vo.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
@@ -31,11 +32,8 @@ public class UserController {
     @Autowired
     CityService cityService;
 
-    @Autowired
-    MailSenderService mailService;
-
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ResponseEntity<String> register(@RequestBody UserDto userReq, HttpServletRequest httpServletRequest) throws BmsException {
+    public ResponseEntity<String> register(@RequestBody UserDto userReq, HttpServletRequest httpServletRequest) throws BmsException, MessagingException {
 
         Optional<CityVo> cityVo = cityService.findCityById(userReq.getCityId());
         if(cityVo!=null && cityVo.isPresent()) {
@@ -49,7 +47,7 @@ public class UserController {
 
     @RequestMapping(value = "/forgot", method = RequestMethod.POST)
     public ResponseEntity<String> forgot(@RequestBody UserDto userReq, HttpServletRequest httpServletRequest) throws BmsException, MessagingException {
-        mailService.sendMail(null, null);
+
         Optional<CityVo> cityVo = cityService.findCityById(userReq.getCityId());
         if(cityVo!=null && cityVo.isPresent()) {
             userService.forgotPassword(userReq.getUserVo(cityVo.get()));
@@ -61,7 +59,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/api/updateUser", method = RequestMethod.POST)
-    public ResponseEntity<String> updateUser(Principal auth, @RequestBody UserDto userReq, HttpServletRequest httpServletRequest) throws BmsException {
+    public ResponseEntity<String> updateUser(Principal auth, @RequestBody UserDto userReq, HttpServletRequest httpServletRequest) throws BmsException, MessagingException {
         if(auth==null)
             throw new BmsException(APIErrors.UNAUTHORISED);
 
@@ -112,7 +110,7 @@ public class UserController {
             newUser.setCreatedDate(origUser.getCreatedDate());
             newUser.setLastLoggedIn(origUser.getLastLoggedIn());
 
-            if(!UserService.AllowedUserTypes.U.toString().equals(principal.getType())
+            if((!UserService.AllowedUserTypes.U.toString().equals(principal.getType()) && principal.getId() != userReq.getId())
                     || origUser.getPassword().equals(SecurityUtils.getMD5Hash(userReq.getOldPassword())))
                 userService.saveUser(newUser);
             else
@@ -178,7 +176,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/api/addStudentToUser", method = RequestMethod.PATCH)
-    public ResponseEntity<String> addStudentToUser(Principal auth, @RequestParam @NotNull long userId, @RequestParam @NotNull long studentId) throws BmsException {
+    public ResponseEntity<String> addStudentToUser(Principal auth, @RequestParam @NotNull long userId, @RequestParam @NotNull long studentId) throws BmsException, MessagingException {
         if(auth==null)
             throw new BmsException(APIErrors.UNAUTHORISED);
 
@@ -193,7 +191,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/api/removeStudentFromUser", method = RequestMethod.PATCH)
-    public ResponseEntity<String> removeStudentFromUser(Principal auth, @RequestParam @NotNull long userId, @RequestParam @NotNull long studentId) throws BmsException {
+    public ResponseEntity<String> removeStudentFromUser(Principal auth, @RequestParam @NotNull long userId, @RequestParam @NotNull long studentId) throws BmsException, MessagingException {
         if(auth==null)
             throw new BmsException(APIErrors.UNAUTHORISED);
 

@@ -8,9 +8,11 @@ import ca.bmskarate.util.YesNo;
 import ca.bmskarate.vo.StudentVo;
 import ca.bmskarate.vo.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
 import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
@@ -23,6 +25,12 @@ public class UserService {
 
     @Autowired
     StudentRepository studentRepository;
+
+    @Autowired
+    MailSenderService mailService;
+
+    @Autowired
+    Environment env;
 
     public enum AllowedUserTypes{U ("User"), A("Admin"), S("Super User");
         private final String desc;
@@ -75,7 +83,7 @@ public class UserService {
     }
 
     @Transactional
-    public void saveUser(UserVo vo) throws BmsException {
+    public void saveUser(UserVo vo) throws BmsException, MessagingException {
         //validate user before saving
         String errors = validateUser(vo);
         if(errors!=null && errors.length()>0) {
@@ -88,7 +96,13 @@ public class UserService {
                 throw new BmsException("Email already exists");
             }
 
-            vo.setPasswordAsEncrypt("abc123");//TODO: password needs to be done via email
+            String newPass = genPassword(6);
+            String emailText = env.getProperty("register.mail.text");
+            emailText = emailText.replaceAll("'fname'", userVo.getFirstName());
+            emailText = emailText.replaceAll("'lname'", userVo.getLastName());
+            emailText = emailText.replaceAll("'password'", newPass);
+            mailService.sendMail(vo.getEmailId(), env.getProperty("register.mail.subject"), emailText);
+            vo.setPasswordAsEncrypt(newPass);//TODO: password needs to be done via email
 
             vo.setPremium(YesNo.N.toString());
             vo.setType(AllowedUserTypes.U.toString());
@@ -109,20 +123,26 @@ public class UserService {
     }
 
     @Transactional
-    public void forgotPassword(UserVo vo) throws BmsException{
+    public void forgotPassword(UserVo vo) throws BmsException, MessagingException {
         UserVo userVo = getUserByEmail(vo.getEmailId());
 
         if(userVo==null || !userVo.getSecretAns().equals(vo.getSecretAns())){
             throw new BmsException("User not found/wrong secret answer");
         }
 
-        userVo.setPasswordAsEncrypt("abc123");
+        String newPass = genPassword(6);
+        String emailText = env.getProperty("forgot.mail.text");
+        emailText = emailText.replaceAll("'fname'", userVo.getFirstName());
+        emailText = emailText.replaceAll("'lname'", userVo.getLastName());
+        emailText = emailText.replaceAll("'password'", newPass);
+        mailService.sendMail(vo.getEmailId(), env.getProperty("forgot.mail.subject"), emailText);
+        userVo.setPasswordAsEncrypt(newPass);
 
         saveUser(userVo);
     }
 
     @Transactional
-    public void addStudentToUser(long userId, long studentId) throws BmsException {
+    public void addStudentToUser(long userId, long studentId) throws BmsException, MessagingException {
         Optional<UserVo> userOpt = getUserById(userId);
         if(userOpt==null || !userOpt.isPresent())
             throw new BmsException("User does not exist");
@@ -146,7 +166,7 @@ public class UserService {
     }
 
     @Transactional
-    public void removeStudentFromUser(long userId, long studentId) throws BmsException {
+    public void removeStudentFromUser(long userId, long studentId) throws BmsException, MessagingException {
         Optional<UserVo> userOpt = getUserById(userId);
         if(userOpt==null || !userOpt.isPresent())
             throw new BmsException("User does not exist");
@@ -261,6 +281,28 @@ public class UserService {
         }
 
         return error;
+    }
+
+    private String genPassword(int n) {
+        char[] pw = new char[n];
+        int c = 'A';
+        int r1 = 0;
+        for (int i = 0; i < n; i++) {
+            r1 = (int) (Math.random() * 3);
+            switch (r1) {
+                case 0:
+                    c = '0' + (int) (Math.random() * 10);
+                    break;
+                case 1:
+                    c = 'a' + (int) (Math.random() * 26);
+                    break;
+                case 2:
+                    c = 'A' + (int) (Math.random() * 26);
+                    break;
+            }
+            pw[i] = (char) c;
+        }
+        return new String(pw);
     }
 }
 
