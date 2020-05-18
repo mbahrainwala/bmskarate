@@ -3,6 +3,7 @@ package ca.bmskarate.controller;
 import ca.bmskarate.dto.UserDto;
 import ca.bmskarate.exception.BmsException;
 import ca.bmskarate.service.CityService;
+import ca.bmskarate.service.MailSenderService;
 import ca.bmskarate.service.UserService;
 import ca.bmskarate.util.APIErrors;
 import ca.bmskarate.util.SecurityUtils;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
 import java.security.Principal;
@@ -29,6 +31,9 @@ public class UserController {
     @Autowired
     CityService cityService;
 
+    @Autowired
+    MailSenderService mailService;
+
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public ResponseEntity<String> register(@RequestBody UserDto userReq, HttpServletRequest httpServletRequest) throws BmsException {
 
@@ -43,8 +48,8 @@ public class UserController {
     }
 
     @RequestMapping(value = "/forgot", method = RequestMethod.POST)
-    public ResponseEntity<String> forgot(@RequestBody UserDto userReq, HttpServletRequest httpServletRequest) throws BmsException {
-
+    public ResponseEntity<String> forgot(@RequestBody UserDto userReq, HttpServletRequest httpServletRequest) throws BmsException, MessagingException {
+        mailService.sendMail(null, null);
         Optional<CityVo> cityVo = cityService.findCityById(userReq.getCityId());
         if(cityVo!=null && cityVo.isPresent()) {
             userService.forgotPassword(userReq.getUserVo(cityVo.get()));
