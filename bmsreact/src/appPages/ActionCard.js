@@ -36,9 +36,6 @@ const useStyles = makeStyles((theme) => ({
 const ActionCard = props => {
     const classes = useStyles();
 
-    const openBelt = (beltid) =>{
-    };
-
     return (
         <Card className={classes.root}>
             <CardContent>
@@ -83,8 +80,15 @@ const ActionCard = props => {
                         {props.globalData.commonData.belts.map(belt=>(
                                 <>
                                 {belt.beltId<=props.globalData.loginUser.maxBelt?(
-                                    <Button key={belt.beltId} beltid={belt.beltId} onClick={()=>{openBelt(belt.beltId)}}>
-                                                                        {belt.beltColor}</Button>
+                                    <Button key={belt.beltId} beltid={belt.beltId} onClick={
+                                        ()=>{
+                                                const newProps = {...props.globalData};
+                                                newProps.appPage='beltVideos';
+                                                newProps.belt=belt;
+                                                props.setGlobalData(newProps);
+                                            }
+                                        }>
+                                            {belt.beltColor}</Button>
                                     ):null}
                                 </>
                             )

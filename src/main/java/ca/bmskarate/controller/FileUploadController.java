@@ -1,9 +1,12 @@
 package ca.bmskarate.controller;
 
 import ca.bmskarate.exception.BmsException;
+import ca.bmskarate.security.SessionTokenManager;
+import ca.bmskarate.util.APIErrors;
 import ca.bmskarate.util.VideoType;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,8 +23,10 @@ import java.security.Principal;
 public class FileUploadController {
 
     @PostMapping(value = "/uploadTrainingVideo", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> uploadTrainingVideo(Principal principal, @RequestParam String belt
+    public ResponseEntity<String> uploadTrainingVideo(Principal principal, @RequestParam int belt, @RequestParam String desc
             , @RequestParam("file") MultipartFile file) throws BmsException, IOException {
+        if(principal==null)
+            throw new BmsException(APIErrors.UNAUTHORISED);
 
         String originalFileName = StringUtils.cleanPath(file.getOriginalFilename());
         String fileName = "";
@@ -44,6 +49,6 @@ public class FileUploadController {
         Path targetLocation = fileStorageLocation.resolve(fileName);
         Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
-        return ResponseEntity.ok("Success");
+        return ResponseEntity.ok("Update Successful");
     }
 }

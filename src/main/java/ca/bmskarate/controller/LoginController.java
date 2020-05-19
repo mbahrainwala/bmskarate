@@ -18,6 +18,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public class LoginController {
     UserService userService;
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginReq, HttpServletRequest httpServletRequest) throws BmsException, CloneNotSupportedException {
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginReq, HttpServletRequest httpServletRequest) throws BmsException, CloneNotSupportedException, MessagingException {
         LoginResponse resp = new LoginResponse();
 
         UserVo userVo = userService.getUserByEmailPassword(loginReq.getEmailId(), loginReq.getPassword());

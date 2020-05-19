@@ -4,6 +4,7 @@ import EditUser from './EditUser'
 import ListUsers from './ListUsers'
 import ListStudents from './ListStudents'
 import AddEditStudent from './AddEditStudent'
+import ListBeltVideos from './ListBeltVideos'
 
 const MainApp = props => {
     return(
@@ -19,12 +20,14 @@ const MainApp = props => {
 
             {props.globalData.appPage==='addEditStudent'?(<AddEditStudent globalData={props.globalData} setGlobalData={props.setGlobalData}/>):null}
 
+            {props.globalData.appPage==='beltVideos'?(<ListBeltVideos globalData={props.globalData} setGlobalData={props.setGlobalData}/>):null}
+
             {props.globalData.appPage==='default'?(<>
                 {props.globalData.loginUser.type !== 'U' ? (
                     <><ActionCard type='u' globalData={props.globalData} setGlobalData={props.setGlobalData} desc='Manage users'/> &nbsp;</>
                 ):null}
                 <ActionCard type='s' desc='Students' globalData={props.globalData} setGlobalData={props.setGlobalData}/>
-                &nbsp; <ActionCard type='v' desc='Videos' globalData={props.globalData}/>
+                &nbsp; <ActionCard type='v' desc='Videos' globalData={props.globalData} setGlobalData={props.setGlobalData}/>
             </>):null}
         </div>
     );
