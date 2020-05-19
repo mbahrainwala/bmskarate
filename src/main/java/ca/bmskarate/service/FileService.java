@@ -19,6 +19,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class FileService {
@@ -27,6 +28,11 @@ public class FileService {
 
     @Autowired
     private TrainingVideoRepository tvRepo;
+
+    @Transactional
+    public Optional<ClassVideoVo> findTrainingVideoById(long id){
+        return tvRepo.findById(id);
+    }
 
     @Transactional
     public void saveTrainingFile(int belt, String desc, MultipartFile file) throws BmsException, IOException {

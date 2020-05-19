@@ -6,7 +6,6 @@ import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import HomeIcon from '@material-ui/icons/Home';
 import Button from '@material-ui/core/Button';
-import Link from '@material-ui/core/Link';
 
 import Login from './Login'
 import Register from './Register'
@@ -63,6 +62,7 @@ function App(){
 
     return (
         <div className={classes.root}>
+        <div>
             <Helmet>
                 <title>BMS Karate</title>
             </Helmet>
@@ -86,11 +86,8 @@ function App(){
             {globalData.page==='register'?<Register globalData={globalData} setGlobalData={setGlobalData}/>:null}
             {globalData.page==='forgot'?<Forgot globalData={globalData} setGlobalData={setGlobalData}/>:null}
             {globalData.page==='mainApp'?<MainApp globalData={globalData} setGlobalData={setGlobalData}/>:null}
-            <div style={{position: 'absolute', bottom: 20}}>Created by Mustafa Behrainwala&nbsp;(
-                <Link href="mailto:mbahrainwala@hotmail.com" >
-                    mbahrainwala@hotmail.com
-                  </Link>)
-            </div>
+        </div>
+
         </div>
     );
 }

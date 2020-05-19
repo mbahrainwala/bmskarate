@@ -15,6 +15,9 @@ import {
 } from "@material-ui/core";
 import axios from 'axios';
 import {restCall} from '../utils/RestComponent'
+import { Player} from 'video-react';
+import "./video-react.css";
+import Link from '@material-ui/core/Link';
 
 const uploadData=new FormData();
 const ListBeltVideos=(props)=>{
@@ -64,6 +67,12 @@ const ListBeltVideos=(props)=>{
         }
     }
 
+    const videoURI = `http://localhost:8080/api/downloadTrainingVideo?token=${props.globalData.token}&videoId=`;
+
+    function createVideoLink(videoId){
+        return `${videoURI}${videoId}`;
+    }
+
     return(
         <>
             {props.globalData.loginUser.type!=='U'?(
@@ -108,6 +117,7 @@ const ListBeltVideos=(props)=>{
                         <TableHead>
                           <TableRow>
                             <TableCell>Video</TableCell>
+                            <TableCell>&nbsp;</TableCell>
                             <TableCell>Description</TableCell>
                             <TableCell>CreatedDate</TableCell>
                             {props.globalData.loginUser.type!=='U'?(
@@ -123,7 +133,17 @@ const ListBeltVideos=(props)=>{
                                     {apiListRet.map(video=>(
                                         <TableRow key={video.id}>
                                             <TableCell component="th" scope="row">
-                                                {video.fileName}
+                                                <div style={{width:250}}>
+                                                <Player
+                                                    playsInline
+                                                    preload='none'
+                                                    fluid='false'
+                                                    src={createVideoLink(video.id)}
+                                                    />
+                                                </div>
+                                            </TableCell>
+                                            <TableCell scope="row">
+                                                <Link href={createVideoLink(video.id)}>Download</Link>
                                             </TableCell>
                                             <TableCell scope="row">
                                                 {video.description}
@@ -131,6 +151,12 @@ const ListBeltVideos=(props)=>{
                                             <TableCell scope="row">
                                                 {video.createdDate}
                                             </TableCell>
+                                            {props.globalData.loginUser.type!=='U'?(
+                                            <TableCell>
+                                                <Button variant="contained" color="primary" size="medium">
+                                                    Delete
+                                                </Button>
+                                            </TableCell>):null}
                                         </TableRow>
                                     ))}
                                 </>
