@@ -6,16 +6,19 @@ import ca.bmskarate.util.VideoType;
 import ca.bmskarate.vo.ClassVideoVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class FileService {
@@ -25,6 +28,7 @@ public class FileService {
     @Autowired
     private TrainingVideoRepository tvRepo;
 
+    @Transactional
     public void saveTrainingFile(int belt, String desc, MultipartFile file) throws BmsException, IOException {
         String originalFileName = StringUtils.cleanPath(file.getOriginalFilename());
         String fileName = "";
@@ -54,5 +58,10 @@ public class FileService {
 
         Path targetLocation = fileStorageLocation.resolve(fileName);
         Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+    }
+
+    @Transactional
+    public List<ClassVideoVo> listTrainingVideos(int belt){
+        return tvRepo.findByBelt(belt, Sort.by("createdDate").descending());
     }
 }

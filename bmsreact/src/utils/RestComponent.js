@@ -13,7 +13,7 @@ export const restCall = async(method, endpoint, setApiRet, token, data) =>{
             setApiRet(response.data);
     }, (error) => {
         if(error!==null && error.response!==null
-            && error.response != undefined
+            && error.response !== undefined
             && error.response.data!==null
             && error.response.data.message !== null
             && error.response.data.message !== 'No message available'

@@ -2,8 +2,11 @@ package ca.bmskarate.controller;
 
 import ca.bmskarate.exception.BmsException;
 import ca.bmskarate.security.SessionTokenManager;
+import ca.bmskarate.service.FileService;
 import ca.bmskarate.util.APIErrors;
+import ca.bmskarate.vo.ClassVideoVo;
 import ca.bmskarate.vo.UserVo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +20,20 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.security.Principal;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
 public class FileDownloadController {
+    @Autowired
+    private FileService fileService;
+
+    @GetMapping(value="listTrainingVideo")
+    public ResponseEntity<List<ClassVideoVo>> listTrainingVideo(Principal principal, @RequestParam int belt){
+        return ResponseEntity.ok(fileService.listTrainingVideos(belt));
+    }
+
     @GetMapping(value = "/download")
     public ResponseEntity<StreamingResponseBody> download(@RequestParam String token, final HttpServletRequest request, final HttpServletResponse response) throws BmsException {
         Authentication auth = SessionTokenManager.getToken(token, request.getRemoteAddr());
