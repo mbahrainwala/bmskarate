@@ -10,22 +10,23 @@ import {
 } from "@material-ui/core";
 import axios from 'axios';
 
+const uploadData=new FormData();
 const ListBeltVideos=(props)=>{
-    const uploadData=new FormData();
     const [apiRet, setApiRet] = useState({});
 
     const changeFunc=(event)=>{
         if(event.target.id==='videodesc')
             uploadData.set('desc', event.target.value);
         if(event.target.id==='videoFile'){
-            var data = new FormData()
             uploadData.set('file', event.target.files[0])
         }
     };
 
     const uploadFile=()=>{
+        setApiRet({});
         if(uploadData!==null){
             uploadData.set('belt', props.globalData.belt.beltId);
+            setApiRet({error:'Uploading'});
             axios.post(`${props.globalData.serverURI}/api/uploadTrainingVideo`, uploadData,
                  {headers: {
                        'Content-Type': 'multipart/form-data', 'X-SESSION-ID':props.globalData.token
@@ -34,7 +35,12 @@ const ListBeltVideos=(props)=>{
              .then(response => setApiRet(response.data))
              .catch(
                 error => {
-                    if(error.response.data.message !== null && error.response.data.message !== 'No message available' && error.response.data.message !== ''){
+                    if(error!==null && error.response!==null
+                        && error.response != undefined
+                        && error.response.data!==null
+                        && error.response.data.message !== null
+                        && error.response.data.message !== 'No message available'
+                        && error.response.data.message !== ''){
                         var errorStr = {error:`${error.response.data.message}`}
                         setApiRet(errorStr);
                     }else
