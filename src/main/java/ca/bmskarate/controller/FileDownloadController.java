@@ -14,10 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
@@ -47,6 +44,20 @@ public class FileDownloadController {
             throw new BmsException(APIErrors.NOACCESS);
 
         return ResponseEntity.ok(fileService.listTrainingVideos(belt));
+    }
+
+    @DeleteMapping(value="deleteTrainingVideo")
+    public ResponseEntity<String> deleteTrainingVideo(Principal auth, @RequestParam long videoId) throws BmsException, IOException {
+        if(auth==null)
+            throw new BmsException(APIErrors.UNAUTHORISED);
+
+        UserVo principal = (UserVo) ((UsernamePasswordAuthenticationToken)auth).getPrincipal();
+
+        if(UserService.AllowedUserTypes.U.toString().equals(principal.getType()))
+            throw new BmsException(APIErrors.NOACCESS);
+
+        fileService.deleteTrainingVideoById(videoId);
+        return ResponseEntity.ok(APIErrors.SUCCESS);
     }
 
     @GetMapping(value = "/downloadTrainingVideo")

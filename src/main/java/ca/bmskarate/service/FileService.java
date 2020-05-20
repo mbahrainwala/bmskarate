@@ -2,6 +2,7 @@ package ca.bmskarate.service;
 
 import ca.bmskarate.exception.BmsException;
 import ca.bmskarate.repositories.TrainingVideoRepository;
+import ca.bmskarate.util.APIErrors;
 import ca.bmskarate.util.VideoType;
 import ca.bmskarate.vo.ClassVideoVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,20 @@ public class FileService {
     @Transactional
     public Optional<ClassVideoVo> findTrainingVideoById(long id){
         return tvRepo.findById(id);
+    }
+
+    @Transactional
+    public void deleteTrainingVideoById(long id) throws BmsException, IOException {
+        Optional<ClassVideoVo> optVo = tvRepo.findById(id);
+        if(optVo == null || !optVo.isPresent())
+            throw new BmsException(APIErrors.NOTFOUND);
+
+        ClassVideoVo vo = optVo.get();
+        Path fileStorageLocation = Paths.get(env.getProperty("file.trainingVideo")).toAbsolutePath().normalize();
+        Path targetLocation = fileStorageLocation.resolve(vo.getFileName());
+        Files.delete(targetLocation);
+
+        tvRepo.deleteById(id);
     }
 
     @Transactional

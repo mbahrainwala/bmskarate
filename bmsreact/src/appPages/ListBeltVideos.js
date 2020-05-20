@@ -73,6 +73,10 @@ const ListBeltVideos=(props)=>{
         return `${videoURI}${videoId}`;
     }
 
+    const deleteTrainingVideo=(videoId)=>{
+            restCall('DELETE', `${props.globalData.serverURI}/api/deleteTrainingVideo?videoId=${videoId}`, setApiRet, props.globalData.token, null);
+        }
+
     return(
         <>
             {props.globalData.loginUser.type!=='U'?(
@@ -153,7 +157,7 @@ const ListBeltVideos=(props)=>{
                                             </TableCell>
                                             {props.globalData.loginUser.type!=='U'?(
                                             <TableCell>
-                                                <Button variant="contained" color="primary" size="medium">
+                                                <Button variant="contained" color="primary" size="medium" onClick={()=>{deleteTrainingVideo(video.id)}}>
                                                     Delete
                                                 </Button>
                                             </TableCell>):null}
