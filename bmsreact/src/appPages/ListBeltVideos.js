@@ -67,7 +67,7 @@ const ListBeltVideos=(props)=>{
         }
     }
 
-    const videoURI = `http://localhost:8080/api/downloadTrainingVideo?token=${props.globalData.token}&videoId=`;
+    const videoURI = `${props.globalData.serverURI}/api/downloadTrainingVideo?token=${props.globalData.token}&videoId=`;
 
     function createVideoLink(videoId){
         return `${videoURI}${videoId}`;
