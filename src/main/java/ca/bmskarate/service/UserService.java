@@ -96,12 +96,13 @@ public class UserService {
                 throw new BmsException("Email already exists");
             }
 
-            String newPass = genPassword(6);
-            String emailText = env.getProperty("register.mail.text");
-            emailText = emailText.replaceAll("'fname'", vo.getFirstName());
-            emailText = emailText.replaceAll("'lname'", vo.getLastName());
-            emailText = emailText.replaceAll("'password'", newPass);
-            mailService.sendMail(vo.getEmailId(), env.getProperty("register.mail.subject"), emailText);
+            String newPass = "Abcd1234";
+//            String newPass = genPassword(6);
+//            String emailText = env.getProperty("register.mail.text");
+//            emailText = emailText.replaceAll("'fname'", vo.getFirstName());
+//            emailText = emailText.replaceAll("'lname'", vo.getLastName());
+//            emailText = emailText.replaceAll("'password'", newPass);
+//            mailService.sendMail(vo.getEmailId(), env.getProperty("register.mail.subject"), emailText);
             vo.setPasswordAsEncrypt(newPass);//TODO: password needs to be done via email
 
             vo.setPremium(YesNo.N.toString());
@@ -130,12 +131,13 @@ public class UserService {
             throw new BmsException("User not found/wrong secret answer");
         }
 
-        String newPass = genPassword(6);
-        String emailText = env.getProperty("forgot.mail.text");
-        emailText = emailText.replaceAll("'fname'", userVo.getFirstName());
-        emailText = emailText.replaceAll("'lname'", userVo.getLastName());
-        emailText = emailText.replaceAll("'password'", newPass);
-        mailService.sendMail(vo.getEmailId(), env.getProperty("forgot.mail.subject"), emailText);
+        String newPass = "Abcd1234";
+//        String newPass = genPassword(6);
+//        String emailText = env.getProperty("forgot.mail.text");
+//        emailText = emailText.replaceAll("'fname'", userVo.getFirstName());
+//        emailText = emailText.replaceAll("'lname'", userVo.getLastName());
+//        emailText = emailText.replaceAll("'password'", newPass);
+//        mailService.sendMail(vo.getEmailId(), env.getProperty("forgot.mail.subject"), emailText);
         userVo.setPasswordAsEncrypt(newPass);
 
         saveUser(userVo);
