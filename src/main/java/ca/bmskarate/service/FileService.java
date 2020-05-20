@@ -44,7 +44,12 @@ public class FileService {
         ClassVideoVo vo = optVo.get();
         Path fileStorageLocation = Paths.get(env.getProperty("file.trainingVideo")).toAbsolutePath().normalize();
         Path targetLocation = fileStorageLocation.resolve(vo.getFileName());
-        Files.delete(targetLocation);
+        try {
+            Files.delete(targetLocation);
+        }catch(IOException ioe){
+            if(!ioe.getMessage().contains("java.nio.file.NoSuchFileException"))
+                throw ioe;
+        }
 
         tvRepo.deleteById(id);
     }
