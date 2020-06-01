@@ -35,6 +35,7 @@ const Login = props => {
     });
 
     const loginUser = (method, uri) => {
+        localStorage.clear();
         restCall('POST', `${props.globalData.serverURI}/login`, setApiRet, '', loginState);
     }
 
